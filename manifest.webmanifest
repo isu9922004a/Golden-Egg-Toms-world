@@ -1,0 +1,13 @@
+{
+  "name": "砸金蛋 Lucky Eggs｜手機遊戲",
+  "short_name": "砸金蛋",
+  "lang": "zh-TW",
+  "description": "六顆金蛋觸控街機遊戲，收集金雞挑戰超級大獎。",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#100324",
+  "theme_color": "#421b8f",
+  "orientation": "portrait",
+  "icons": [{"src":"./assets/icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}]
+}
