@@ -42,3 +42,63 @@
 @keyframes twinkle{from{opacity:.18}to{opacity:.6}}@keyframes rotateLights{to{transform:rotate(360deg)}}@keyframes eggPulse{to{filter:drop-shadow(0 0 15px #fff) drop-shadow(0 0 29px #fff530)}}@keyframes spotPulse{to{filter:brightness(1.9);scale:1.15}}@keyframes crackShake{0%,100%{transform:rotate(-3deg)}20%{transform:rotate(-18deg) translateX(-4px)}45%{transform:rotate(15deg) translateX(6px)}70%{transform:rotate(-9deg)}}@keyframes eggBurst{0%{transform:scale(.2) rotate(-20deg)}50%{transform:scale(1.3) rotate(10deg)}100%{transform:scale(1)}}@keyframes popIn{from{opacity:0;transform:scale(.86)}to{opacity:1;transform:scale(1)}}@keyframes danger{to{filter:brightness(2.3)}}
 @media(max-height:720px){.modal-card{padding:13px 14px}.modal-deco{font-size:24px}.modal-card h1{font-size:30px}.modal-description{font-size:13px;line-height:1.7}.modal-play{margin-top:9px;padding:8px}.modal-footnote{margin-top:8px}.egg-button{height:41%;width:22%}}
 @media(prefers-reduced-motion:reduce){.scene-lights,.stage-spot.active,.egg-button.lit,.console-sparkles{animation-duration:4s}}
+/* ===== 2.0 Three-video enhanced arcade presentation ===== */
+.cabinet{grid-template-rows:8.4% 8% 43.6% 33% 7%;background:linear-gradient(90deg,#5b1ea3 0,#1c083a 4%,#1a063a 96%,#7429a1)}
+.logo-en small{background:#fee98b;color:#6b1d9d;border-radius:4px;padding:1px 3px;font-family:Arial,sans-serif;font-size:9px}
+.video-scene{border-bottom:4px solid #d678ed;background-image:radial-gradient(ellipse at 50% 70%,#8117b777,transparent 75%),url('./assets/arcade-stage.webp');}
+.scene-info{max-width:calc(100% - 86px);font-size:clamp(12px,3.1vw,16px)}
+.arcade-status{position:absolute;z-index:5;top:7.4%;right:2.7%;padding:4px 7px;border:1px solid #af8ceb66;background:#1e0b46b9;border-radius:20px;font-size:clamp(9px,2.1vw,12px);color:#fef2cd;font-weight:800;backdrop-filter:blur(3px)}
+.status-led{width:6px;height:6px;border-radius:50%;background:#67ffa1;box-shadow:0 0 8px #60ff94;display:inline-block;margin-right:3px;vertical-align:middle}
+.scene-bottom{position:absolute;z-index:9;bottom:5%;right:2%;left:13%;display:flex;align-items:center;justify-content:center;gap:5px;pointer-events:none}
+.scene-bottom>div{display:flex;align-items:center;gap:3px;font-weight:1000;font-size:clamp(11px,3.1vw,16px);padding:3px 7px;border:1px solid #f7dcfaad;border-radius:12px;box-shadow:inset 0 0 8px #f0c4ff33,0 0 7px #19022cbf;background:#200946cc;color:#ffe68f;white-space:nowrap}
+.scene-bottom small{font-size:.64em;color:#fff}
+.scene-message{bottom:14%;max-width:85%;left:12%;font-size:clamp(11px,3vw,15px)}
+.reward-stage[hidden],.big-countdown[hidden]{display:none!important}
+.reward-stage{position:absolute;z-index:10;inset:8% 3% 13% 13%;display:flex;align-items:center;justify-content:center;flex-direction:column;border-radius:25px;overflow:hidden;isolation:isolate;background:radial-gradient(circle at 50% 42%,#ec6eedcc 0,#5b208ddd 42%,#17052fef 86%);box-shadow:0 0 38px #ffda72aa,inset 0 0 38px #f88be566;animation:popIn .24s ease-out;pointer-events:none;text-align:center}
+.reward-aura{position:absolute;z-index:-1;width:170%;height:120%;background:repeating-conic-gradient(from 0deg,#fff9ae44 0 9deg,transparent 9deg 22deg);animation:rotateLights 6s linear infinite}
+.reward-hero{font-size:clamp(56px,18vw,100px);line-height:1.1;filter:drop-shadow(0 0 20px #fffb91);animation:eggBurst .4s ease-out}
+.reward-kicker{font-family:Georgia,serif;font-size:clamp(10px,2.8vw,16px);font-weight:900;letter-spacing:4px;color:#ffcfff}
+.reward-title{font-weight:1000;font-size:clamp(25px,7vw,43px);color:#fffbd3;text-shadow:0 3px 0 #95218d,0 0 14px #ffb6ea;letter-spacing:1px}
+.reward-value{color:#fff384;font-weight:1000;font-size:clamp(39px,12vw,70px);line-height:1.2;text-shadow:0 4px #9d4219,0 0 20px #fffa74;font-variant-numeric:tabular-nums}
+.reward-subtitle{color:#fef5ff;font-weight:900;font-size:clamp(15px,4vw,22px)}
+.ticket-rain{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.ticket-piece{position:absolute;top:-20%;width:20px;height:36px;background:linear-gradient(130deg,#fff7a7,#ffbe44);border:2px dashed #a56412;box-shadow:0 0 7px #ffffc5;border-radius:4px;opacity:.9;animation:ticketFall var(--fall,1.8s) linear forwards}
+.ticket-piece:nth-child(3n){background:linear-gradient(120deg,#c5fcff,#55bfee)}
+.ticket-piece:nth-child(4n){background:linear-gradient(120deg,#f7c5ff,#e758d4)}
+@keyframes ticketFall{from{transform:translateY(-18%) rotate(0deg)}to{transform:translateY(640px) rotate(720deg);opacity:.05}}
+.big-countdown{position:absolute;z-index:12;inset:14% 5% 15% 12%;display:flex;align-items:center;justify-content:center;pointer-events:none;color:#fff7b9;font-size:clamp(115px,34vw,220px);font-weight:1000;-webkit-text-stroke:4px #c541bd;text-shadow:0 0 20px #fff,0 0 55px #c457ff,0 12px #3f1471;animation:countPop .9s ease-out}
+@keyframes countPop{0%{opacity:.4;transform:scale(1.45)}35%{opacity:1;transform:scale(.9)}100%{opacity:1;transform:scale(1)}}
+.egg-console{position:relative}
+.egg-button{height:43%;width:27%;min-width:78px;touch-action:manipulation}
+.egg-button.e1{left:30.5%;top:21.5%}.egg-button.e2{left:69.5%;top:21.5%}.egg-button.e3{left:14.5%;top:49%}.egg-button.e4{left:85.5%;top:49%}.egg-button.e5{left:31%;top:80%}.egg-button.e6{left:69%;top:80%}
+.egg-button .egg-shape{top:2%;bottom:14%}
+.egg-button .egg-number{bottom:16%}
+.egg-button:disabled{pointer-events:none}
+.egg-button.active-target .egg-shape{animation:eggPulse .4s ease-in-out infinite alternate}
+.egg-button .ring{bottom:2%}
+.credit-count small{font-size:clamp(8px,2vw,11px)}
+.machine-footer{padding-left:8px;padding-right:8px}
+.machine-footer .credit-count{gap:2px}
+.machine-footer .credit-count strong{font-size:17px}
+.start-button{max-width:220px}
+.mode-chooser{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin:12px 0 0}
+.mode-chooser[hidden]{display:none}
+.mode-choice{border:2px solid #9e66dd;border-radius:12px;background:#220c50;color:#ead5ff;padding:10px 3px;display:flex;flex-direction:column;gap:4px;min-height:55px;align-items:center;justify-content:center}
+.mode-choice.selected{border-color:#fff19a;color:#fff2c9;background:linear-gradient(135deg,#8732a9,#38116e);box-shadow:0 0 11px #ffeb906e}
+.mode-choice b{font-size:clamp(12px,3.1vw,16px)}.mode-choice small{font-size:clamp(9px,2.4vw,11px)}
+.modal-card{max-height:calc(100dvh - 28px - env(safe-area-inset-top) - env(safe-area-inset-bottom));overflow-y:auto;overscroll-behavior:contain}
+.modal-share{display:block;width:100%;padding:10px;margin:7px 0 0;border:2px solid #aeb8ff;border-radius:13px;color:#fff;background:#392073;font-size:14px;font-weight:900}
+.modal-share[hidden]{display:none}
+.toast{position:absolute;z-index:26;left:50%;bottom:12%;transform:translate(-50%,10px);padding:8px 15px;max-width:90%;text-align:center;background:#241051e8;border:1px solid #ffeea7;color:#fff9d4;border-radius:14px;font-weight:900;opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;white-space:normal;box-shadow:0 0 18px #7b39b9}
+.toast.visible{opacity:1;transform:translate(-50%,0)}
+.scene-message{position:absolute!important}
+/* Accessible and small devices */
+@media (max-height:740px){.cabinet{grid-template-rows:8% 8% 42% 35% 7%}.scene-bottom{bottom:5%;gap:2px}.scene-bottom>div{padding:2px 4px}.egg-button{min-width:64px;width:24%;height:42%}.modal-card{padding:12px 13px}.modal-deco{font-size:24px}.modal-card h1{font-size:29px}.modal-description{font-size:13px;line-height:1.65}.mode-choice{min-height:46px;padding:6px 2px}.modal-play{margin-top:10px;padding:8px}}
+@media (max-width:370px){.score-label{font-size:8px}.score-cell b{font-size:16px}.scene-bottom>div{font-size:10px}.scene-bottom small{font-size:7px}.arcade-status{font-size:9px}.egg-button{min-width:68px}}
+@media (prefers-reduced-motion:reduce){.reward-aura,.ticket-piece,.big-countdown{animation:none!important}.ticket-piece{opacity:.2}.reward-hero{animation:none}}
+.stage-message{bottom:15%;left:13%;width:84%;font-size:clamp(10px,2.8vw,14px);padding:4px 6px}
+.stage-spot span{display:grid;place-items:center;width:100%;height:100%;font-size:12px;font-weight:1000;color:#3c1262;text-shadow:0 1px #fff}
+.arcade-status{top:2.0%;right:2.4%;padding:3px 7px}
+.scene-info{top:11.7%;left:23%;width:73%;max-width:none;font-size:clamp(11px,2.8vw,14px)}
+.reward-stage{background:radial-gradient(circle at 50% 39%,#b346db 0,#5b228d 45%,#18052f 88%)}
+.logo-cn{color:#fff8fa;-webkit-text-stroke:1.8px #7842a6;text-shadow:1px 2px #50159a,-1px -1px #f7cdff,0 0 10px #ffffffaa}

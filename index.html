@@ -2,93 +2,111 @@
 <html lang="zh-Hant">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no">
-  <meta name="theme-color" content="#421b8f">
+  <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+  <meta name="theme-color" content="#261054">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="砸金蛋">
-  <meta name="description" content="觸控六顆金蛋，挑戰在限時內收集三隻金雞！">
+  <meta name="apple-mobile-web-app-title" content="砸金蛋 V2">
+  <meta name="description" content="六顆金蛋觸控遊戲：敲蛋、集獎券、獲得寶石、挑戰三隻金雞與幸運大抽獎。無付費及兌現。">
   <link rel="manifest" href="./manifest.webmanifest">
   <link rel="icon" href="./assets/icon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="./styles.css">
   <script src="./game.js" defer></script>
-  <title>砸金蛋 Lucky Eggs｜手機遊戲</title>
+  <title>砸金蛋 Lucky Eggs V2｜手機街機遊戲</title>
 </head>
 <body>
-  <main class="cabinet" id="app" aria-label="砸金蛋手機遊戲">
-    <header class="marquee">
-      <div class="little-egg left" aria-hidden="true">✦</div>
-      <div class="logo">
-        <span class="logo-cn">砸金蛋</span>
-        <span class="logo-en">LUCKY EGGS</span>
-      </div>
-      <div class="little-egg right" aria-hidden="true">✦</div>
-      <button class="round-icon audio-button" id="audioButton" aria-label="開啟或關閉音效" title="切換音效">🔊</button>
-      <button class="round-icon help-button" id="helpButton" aria-label="遊戲說明" title="遊戲說明">?</button>
-    </header>
+<main class="cabinet" id="app" aria-label="砸金蛋手機街機">
+  <header class="marquee" aria-label="砸金蛋 Lucky Eggs">
+    <div class="little-egg left" aria-hidden="true">✦</div>
+    <div class="logo"><span class="logo-cn">砸金蛋</span><span class="logo-en">LUCKY EGGS <small>V2</small></span></div>
+    <div class="little-egg right" aria-hidden="true">✦</div>
+    <button class="round-icon audio-button" id="audioButton" type="button" aria-label="切換遊戲音效">🔊</button>
+    <button class="round-icon help-button" id="helpButton" type="button" aria-label="查看玩法說明">?</button>
+  </header>
 
-    <div class="scorebar" aria-live="off">
-      <div class="score-cell jackpot-cell"><span class="score-label">JACKPOT</span><b><span class="coin-glyph">★</span><span id="jackpotValue">410</span></b></div>
-      <div class="score-cell"><span class="score-label">得分 SCORE</span><b id="scoreValue">0000</b></div>
-      <div class="score-cell golden-cell"><span class="score-label">金雞 GOLDEN</span><b><span id="goldValue">0</span><small> / 3</small> 🐤</b></div>
-      <div class="score-cell time-cell"><span class="score-label">剩餘時間</span><b id="timeValue">60</b></div>
+  <div class="scorebar" aria-label="遊戲狀態">
+    <div class="score-cell jackpot-cell"><span class="score-label">JACKPOT</span><b>★<span id="jackpotValue">410</span></b></div>
+    <div class="score-cell"><span class="score-label">得分 SCORE</span><b id="scoreValue">0000</b></div>
+    <div class="score-cell golden-cell"><span class="score-label">金雞 GOLDEN</span><b><span id="goldValue">0</span><small> / 3</small> 🐤</b></div>
+    <div class="score-cell time-cell"><span class="score-label">倒數 TIME</span><b id="timeValue">60</b></div>
+  </div>
+
+  <section class="video-scene" id="scene" aria-label="遊戲動畫螢幕">
+    <div class="ribbon-left" aria-label="集滿三隻金雞，挑戰超級大獎"><span>➜</span><strong>集滿 <em>3</em> 隻金雞</strong><strong>挑戰超級大獎</strong></div>
+    <div class="scene-lights" aria-hidden="true"></div>
+    <div class="arcade-status"><span class="status-led"></span><span id="modeLabel">經典模式 · 60 秒</span></div>
+    <div class="scene-info" id="sceneInfo" aria-live="polite">看準亮起的金蛋，立即點擊！</div>
+    <div class="stage-spot s1" data-stage="0"><span>1</span></div>
+    <div class="stage-spot s2" data-stage="1"><span>2</span></div>
+    <div class="stage-spot s3" data-stage="2"><span>3</span></div>
+    <div class="stage-spot s4" data-stage="3"><span>4</span></div>
+    <div class="stage-spot s5" data-stage="4"><span>5</span></div>
+    <div class="stage-spot s6" data-stage="5"><span>6</span></div>
+    <div class="center-flash" id="centerFlash" aria-hidden="true"><div class="flash-egg">🥚</div><div class="flash-label"></div></div>
+    <div class="reward-stage" id="rewardStage" aria-live="polite" aria-atomic="true" hidden>
+      <div class="reward-aura"></div>
+      <div class="reward-hero" id="rewardHero">🥚</div>
+      <div class="reward-kicker" id="rewardKicker">LUCKY EGGS</div>
+      <div class="reward-title" id="rewardTitle">幸運大抽獎</div>
+      <div class="reward-value" id="rewardValue">+36</div>
+      <div class="reward-subtitle" id="rewardSubtitle">張獎券</div>
+      <div class="ticket-rain" id="ticketRain" aria-hidden="true"></div>
     </div>
-
-    <section class="video-scene" id="scene" aria-label="金蛋獎台">
-      <div class="ribbon-left"><span>➜</span><strong>集滿 <em>3</em> 隻金雞</strong><strong>挑戰超級大獎</strong></div>
-      <div class="scene-lights" aria-hidden="true"></div>
-      <div class="scene-info" id="sceneInfo">敲中發亮的金蛋！</div>
-      <div class="stage-spot s1" data-stage="0"></div>
-      <div class="stage-spot s2" data-stage="1"></div>
-      <div class="stage-spot s3" data-stage="2"></div>
-      <div class="stage-spot s4" data-stage="3"></div>
-      <div class="stage-spot s5" data-stage="4"></div>
-      <div class="stage-spot s6" data-stage="5"></div>
-      <div class="center-flash" id="centerFlash" aria-hidden="true"><div class="flash-egg">🥚</div><div class="flash-label"></div></div>
-      <div class="stage-message" id="stageMessage" aria-live="polite">準備好就開始遊戲</div>
-      <div class="round-progress" aria-label="回合進度"><div id="roundProgress"></div></div>
-    </section>
-
-    <section class="egg-console" aria-label="敲擊控制盤">
-      <div class="console-outline" aria-hidden="true"></div>
-      <div class="console-sparkles" aria-hidden="true">✦ <span>✧</span> ✦</div>
-      <div class="egg-grid" id="eggGrid">
-        <button type="button" class="egg-button e1" data-index="0" aria-label="敲擊第1顆金蛋"><span class="ring"></span><span class="egg-shape"><i></i></span><span class="egg-number">1</span></button>
-        <button type="button" class="egg-button e2" data-index="1" aria-label="敲擊第2顆金蛋"><span class="ring"></span><span class="egg-shape"><i></i></span><span class="egg-number">2</span></button>
-        <button type="button" class="egg-button e3" data-index="2" aria-label="敲擊第3顆金蛋"><span class="ring"></span><span class="egg-shape"><i></i></span><span class="egg-number">3</span></button>
-        <button type="button" class="egg-button e4" data-index="3" aria-label="敲擊第4顆金蛋"><span class="ring"></span><span class="egg-shape"><i></i></span><span class="egg-number">4</span></button>
-        <button type="button" class="egg-button e5" data-index="4" aria-label="敲擊第5顆金蛋"><span class="ring"></span><span class="egg-shape"><i></i></span><span class="egg-number">5</span></button>
-        <button type="button" class="egg-button e6" data-index="5" aria-label="敲擊第6顆金蛋"><span class="ring"></span><span class="egg-shape"><i></i></span><span class="egg-number">6</span></button>
-      </div>
-      <div class="coin-basket" aria-hidden="true"><span class="basket-rim"></span><span class="basket-coins">🪙 🪙 🪙</span><span class="basket-label">LUCKY</span></div>
-      <div class="console-tip" id="consoleTip">點擊發光金蛋 ・ 也可以按鍵盤 1～6</div>
-    </section>
-
-    <footer class="machine-footer">
-      <div class="credit-count">🪙 代幣 <strong id="creditValue">5</strong> <button id="addCoinButton" type="button" aria-label="增加試玩代幣">＋</button></div>
-      <button class="start-button" id="startButton" type="button">▶ 開始遊戲</button>
-      <div class="best-count">最高分 <strong id="bestValue">0</strong></div>
-    </footer>
-
-    <canvas id="particleCanvas" aria-hidden="true"></canvas>
-
-    <div class="modal-layer" id="modalLayer">
-      <div class="modal-shade"></div>
-      <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
-        <div class="modal-deco">✨ 🥚 ✨</div>
-        <h1 id="modalTitle">砸金蛋</h1>
-        <p class="modal-lead" id="modalLead">Lucky Eggs · 手機街機版</p>
-        <div class="modal-description" id="modalDescription">
-          看準亮起的金蛋，快速點擊敲破！<br>
-          <b>60 秒內收集 3 隻金雞</b>，挑戰超級大獎。<br>
-          沒有投幣機也能免費試玩。
-        </div>
-        <div class="modal-stats" id="modalStats" hidden></div>
-        <button class="modal-play" id="modalAction" type="button">🥚 開始砸金蛋</button>
-        <button class="modal-secondary" id="modalSecondary" type="button" hidden>返回遊戲</button>
-        <p class="modal-footnote" id="modalFootnote">參考上傳影片重製的互動試玩版本，無實體獎品或金錢兌換。</p>
-      </div>
+    <div class="big-countdown" id="bigCountdown" aria-hidden="true" hidden>3</div>
+    <div class="stage-message" id="stageMessage" aria-live="polite">集滿 3 隻金雞，挑戰超級大獎！</div>
+    <div class="scene-bottom">
+      <div class="ticket-chip">🎟 <span id="ticketValue">0</span> <small>獎券</small></div>
+      <div class="gem-chip">💎 <span id="gemValue">0</span> <small>寶石</small></div>
+      <div class="hit-chip">🔥 <span id="comboValue">0</span> <small>連擊</small></div>
     </div>
-  </main>
+    <div class="round-progress"><div id="roundProgress"></div></div>
+  </section>
+
+  <section class="egg-console" aria-label="六顆可敲擊金蛋">
+    <div class="console-outline" aria-hidden="true"></div>
+    <div class="console-sparkles" aria-hidden="true">✦ <span>✧</span> ✦</div>
+    <div class="egg-grid" id="eggGrid">
+      <button type="button" class="egg-button e1" data-index="0" aria-label="敲擊第一顆金蛋"><span class="ring"></span><span class="egg-shape"><i></i></span><span class="egg-number">1</span></button>
+      <button type="button" class="egg-button e2" data-index="1" aria-label="敲擊第二顆金蛋"><span class="ring"></span><span class="egg-shape"><i></i></span><span class="egg-number">2</span></button>
+      <button type="button" class="egg-button e3" data-index="2" aria-label="敲擊第三顆金蛋"><span class="ring"></span><span class="egg-shape"><i></i></span><span class="egg-number">3</span></button>
+      <button type="button" class="egg-button e4" data-index="3" aria-label="敲擊第四顆金蛋"><span class="ring"></span><span class="egg-shape"><i></i></span><span class="egg-number">4</span></button>
+      <button type="button" class="egg-button e5" data-index="4" aria-label="敲擊第五顆金蛋"><span class="ring"></span><span class="egg-shape"><i></i></span><span class="egg-number">5</span></button>
+      <button type="button" class="egg-button e6" data-index="5" aria-label="敲擊第六顆金蛋"><span class="ring"></span><span class="egg-shape"><i></i></span><span class="egg-number">6</span></button>
+    </div>
+    <div class="coin-basket" aria-hidden="true"><span class="basket-rim"></span><span class="basket-coins">🪙 🪙 🪙</span><span class="basket-label">LUCKY</span></div>
+    <div class="console-tip" id="consoleTip">螢幕亮哪顆蛋，就點下方對應位置</div>
+  </section>
+
+  <footer class="machine-footer">
+    <div class="credit-count">🪙 <strong id="creditValue">∞</strong><small>免費試玩</small></div>
+    <button class="start-button" id="startButton" type="button">▶ 開始遊戲</button>
+    <div class="best-count">最佳 <strong id="bestValue">0</strong></div>
+  </footer>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <canvas id="particleCanvas" aria-hidden="true"></canvas>
+  <div class="modal-layer" id="modalLayer">
+    <div class="modal-shade"></div>
+    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <div class="modal-deco" id="modalDeco">✨ 🥚 ✨</div>
+      <h1 id="modalTitle">砸金蛋</h1>
+      <p class="modal-lead" id="modalLead">LUCKY EGGS · 街機手機版 V2</p>
+      <div class="modal-description" id="modalDescription">
+        看準亮起的金蛋，快速敲擊！<br>
+        收集 <b>3 隻金雞</b> 挑戰超級大獎。<br>
+        加入 <b>獎券、寶石、幸運大抽獎</b> 等玩法。
+      </div>
+      <div class="mode-chooser" id="modeChooser" aria-label="選擇遊戲模式">
+        <button type="button" class="mode-choice selected" data-mode="classic" aria-pressed="true"><b>經典挑戰</b><small>60秒 · 標準速度</small></button>
+        <button type="button" class="mode-choice" data-mode="rush" aria-pressed="false"><b>極速狂歡</b><small>45秒 · 加速出蛋</small></button>
+      </div>
+      <div class="modal-stats" id="modalStats" hidden></div>
+      <button class="modal-play" id="modalAction" type="button">🥚 開始砸金蛋</button>
+      <button class="modal-secondary" id="modalSecondary" type="button" hidden>返回主畫面</button>
+      <button class="modal-share" id="modalShare" type="button" hidden>↗ 分享本局成績</button>
+      <p class="modal-footnote" id="modalFootnote">遊戲內獎券、寶石及彩金僅為虛擬分數，無現金、實體獎品或兌換機制。</p>
+    </div>
+  </div>
+</main>
 </body>
 </html>
