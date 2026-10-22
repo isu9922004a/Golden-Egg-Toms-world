@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+<defs><radialGradient id="bg"><stop stop-color="#8052e9"/><stop offset="1" stop-color="#1b0742"/></radialGradient><radialGradient id="egg" cx=".3" cy=".22" r=".8"><stop stop-color="#fff9af"/><stop offset=".3" stop-color="#ffeb48"/><stop offset=".75" stop-color="#ffb414"/><stop offset="1" stop-color="#b96306"/></radialGradient><linearGradient id="gold" x2="0" y2="1"><stop stop-color="#fffcc9"/><stop offset=".5" stop-color="#ffc932"/><stop offset="1" stop-color="#ff8100"/></linearGradient></defs>
+<rect width="512" height="512" rx="110" fill="url(#bg)"/>
+<circle cx="255" cy="271" r="205" fill="none" stroke="#9e39f5" stroke-width="15"/><path d="M210 104Q256 43 304 104" stroke="#ed8dff" stroke-width="17" fill="none"/>
+<ellipse cx="256" cy="351" rx="158" ry="54" fill="#4a083f" stroke="#ff63df" stroke-width="20"/>
+<path d="M255 109C177 109 135 229 139 313c3 72 56 117 117 117s113-45 117-117C377 229 334 109 255 109Z" fill="url(#egg)" stroke="#ffdb72" stroke-width="11"/>
+<path d="M214 174Q251 132 293 170" fill="none" stroke="#fffbd4" stroke-width="16" stroke-linecap="round" opacity=".9"/>
+<path d="M256 236l-25 37 26 20-21 52 52-43-27-19 25-47" fill="#fffce6" opacity=".8"/>
+<g font-family="sans-serif" font-weight="900" text-anchor="middle"><text x="256" y="490" font-size="59" stroke="#481275" stroke-width="12" paint-order="stroke fill" fill="url(#gold)">砸金蛋</text></g>
+</svg>
