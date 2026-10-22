@@ -1,12 +1,19 @@
 {
-  "name": "砸金蛋 Lucky Eggs — 手機街機 V2",
-  "short_name": "砸金蛋 V2",
+  "name": "砸金蛋 Lucky Eggs — 手機街機 V3",
+  "short_name": "砸金蛋 V3",
   "lang": "zh-TW",
-  "description": "六金蛋免費觸控街機。獎券、寶石、金雞、大抽獎。",
+  "description": "新增街機選蛋四回合、六蛋轉盤及抽獎動畫的免費娛樂模擬。",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
   "background_color": "#1b083b",
   "theme_color": "#261054",
-  "icons": [{"src":"./assets/icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}]
+  "icons": [
+    {
+      "src": "./assets/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
 }

@@ -1,10 +1,12 @@
-/* Lucky Eggs 2.0.0 — original mobile arcade simulation based on three user-provided videos.
+/* Lucky Eggs 3.0.0 — original mobile arcade simulation based on three user-provided videos.
    IMPORTANT: probabilities and scoring are self-defined; they are NOT obtained from the arcade machine. */
 'use strict';
 (() => {
   const $ = id => document.getElementById(id);
   const ui = {
     app:$('app'),scene:$('scene'),info:$('sceneInfo'),message:$('stageMessage'),
+    goalLabel:$('goalLabel'),goalIcon:$('goalIcon'),ribbon:document.querySelector('.ribbon-left'),timerLabel:$('timerLabel'),wheel:$('arcadeWheel'),wheelTitle:$('wheelTitle'),wheelProgress:$('wheelProgress'),
+    cups:[...document.querySelectorAll('.wheel-cup')],reel:$('lotteryReel'),reelSlots:$('reelSlots'),reelWin:$('reelWin'),
     jackpot:$('jackpotValue'),score:$('scoreValue'),gold:$('goldValue'),time:$('timeValue'),
     timeCell:document.querySelector('.time-cell'),tickets:$('ticketValue'),gems:$('gemValue'),
     combo:$('comboValue'),modeLabel:$('modeLabel'),progress:$('roundProgress'),
@@ -22,18 +24,20 @@
     choices:[...document.querySelectorAll('.mode-choice')]
   };
   const CONFIG = {
+    arcade:{name:'街機選蛋',ms:60_000,interval:0,delay:0,window:0},
     classic:{name:'經典挑戰',ms:60_000,interval:1500,delay:260,window:1550},
     rush:{name:'極速狂歡',ms:45_000,interval:990,delay:190,window:1020}
   };
-  const SAVE_KEY='lucky-eggs-mobile-v2';
+  const SAVE_KEY='lucky-eggs-mobile-v3';
   const DEFAULT_NOTE='影片可觀察到遊戲流程，但原機獎率與公式無法確認。本版純娛樂、無付費與實體兌獎。';
   const state={
-    phase:'idle',mode:'classic',sound:true,best:0,jackpot:410,
+    phase:'idle',mode:'arcade',sound:true,best:0,jackpot:490,
     plays:0,wins:0,score:0,tickets:0,gems:0,gold:0,
     hits:0,misses:0,combo:0,maxCombo:0,roundMs:60_000,remaining:60_000,
     target:-1,lastTarget:-1,nextTargetAt:0,targetExpires:0,
     endAt:0,countdownAt:0,countDisplay:0,locked:false,winPending:false,
     lastWrongAt:0,modalKind:'intro',lastReward:'',lastEvent:'準備好就開始',
+    arcadePicks:0,arcadeItems:[],arcadePhase:'',pendingArcade:null,arcadeRewardSettled:false,
     rewards:{golden:0,ticket:0,gem:0,lucky:0,coin:0,bomb:0}
   };
   let frame=0,animationTimer=0,flashTimer=0,toastTimer=0,feedbackTimer=0;
@@ -47,12 +51,12 @@
   function load(){
     try{
       const data=JSON.parse(localStorage.getItem(SAVE_KEY)||'{}');
-      const old=JSON.parse(localStorage.getItem('lucky-eggs-mobile-v1')||'{}');
+      const old=JSON.parse(localStorage.getItem('lucky-eggs-mobile-v2')||'{}');
       if(typeof data.sound==='boolean')state.sound=data.sound;
       if(Number.isFinite(data.best))state.best=Math.max(0,Math.min(9999999,Math.round(data.best)));
       else if(Number.isFinite(old.best))state.best=Math.max(0,Math.round(old.best));
-      if(Number.isFinite(data.jackpot))state.jackpot=Math.max(410,Math.min(999999,data.jackpot));
-      if(CONFIG[data.mode])state.mode=data.mode;
+      if(Number.isFinite(data.jackpot))state.jackpot=Math.max(490,Math.min(999999,data.jackpot));
+      if(CONFIG[data.mode])state.mode=data.mode;else state.mode='arcade';
       if(Number.isFinite(data.plays))state.plays=Math.max(0,Math.round(data.plays));
       if(Number.isFinite(data.wins))state.wins=Math.max(0,Math.round(data.wins));
     }catch(_){/* missing storage */}
@@ -91,20 +95,29 @@
   function render(){
     ui.jackpot.textContent=String(state.jackpot);
     ui.score.textContent=String(state.score).padStart(4,'0');
-    ui.gold.textContent=String(state.gold);
+    ui.gold.textContent=String(state.mode==='arcade'?state.arcadePicks:state.gold);
+    ui.gold.nextElementSibling && (ui.gold.nextElementSibling.textContent=state.mode==='arcade'?' / 4':' / 3');
+    ui.goalLabel.textContent=state.mode==='arcade'?'進度 ROUND':'金雞 GOLDEN';
+    ui.goalIcon.textContent=state.mode==='arcade'?'🥚':'🐤';
+    if(ui.ribbon.dataset.mode!==state.mode){
+      ui.ribbon.dataset.mode=state.mode;
+      ui.ribbon.innerHTML=state.mode==='arcade'?'<span>➜</span><strong>選蛋</strong><strong>4 回合</strong><strong>挑戰大獎</strong>':'<span>➜</span><strong>集滿 3 隻金雞</strong><strong>挑戰超級大獎</strong>';
+    }
+    ui.timerLabel.textContent=state.mode==='arcade'?'剩餘 LEFT':'倒數 TIME';
     ui.tickets.textContent=String(state.tickets);
     ui.gems.textContent=String(state.gems);
     ui.combo.textContent=String(state.combo);
-    ui.time.textContent=String(Math.max(0,Math.ceil(state.remaining/1000)));
+    ui.time.textContent=state.mode==='arcade'?String(4-state.arcadePicks):String(Math.max(0,Math.ceil(state.remaining/1000)));
+    ui.app.classList.toggle('arcade-mode',state.mode==='arcade');
     ui.best.textContent=String(state.best);
-    ui.modeLabel.textContent=`${CONFIG[state.mode].name} · ${Math.round(CONFIG[state.mode].ms/1000)} 秒`;
-    ui.progress.style.width=`${(100*(1-state.remaining/state.roundMs)).toFixed(2)}%`;
+    ui.modeLabel.textContent=state.mode==='arcade'?'街機選蛋 · 4 次':`${CONFIG[state.mode].name} · ${Math.round(CONFIG[state.mode].ms/1000)} 秒`;
+    ui.progress.style.width=state.mode==='arcade'?`${state.arcadePicks*25}%`:`${(100*(1-state.remaining/state.roundMs)).toFixed(2)}%`;
     ui.sound.textContent=state.sound?'🔊':'🔇';
     ui.sound.setAttribute('aria-label',state.sound?'關閉遊戲音效':'開啟遊戲音效');
     ui.timeCell.classList.toggle('urgent',state.phase==='playing'&&state.remaining<=10_000);
-    const phases={playing:'Ⅱ 暫停',paused:'▶ 繼續',countdown:'準備中…',prize:'🎉 開獎中',idle:'▶ 開始遊戲',result:'▶ 再玩一次'};
+    const phases={playing:'Ⅱ 暫停',paused:'▶ 繼續',countdown:'準備中…',prize:'🎉 開獎中',arcadePreview:'Ⅱ 暫停',arcadeShuffle:'Ⅱ 暫停',arcadeChoose:'Ⅱ 暫停',arcadeReveal:'🎉 開獎中',arcadeReel:'🎟 抽獎中',idle:'▶ 開始遊戲',result:'▶ 再玩一次'};
     ui.start.textContent=phases[state.phase]||'▶ 開始遊戲';
-    ui.start.disabled=state.phase==='countdown';
+    ui.start.disabled=state.phase==='countdown'||state.phase==='arcadeReveal'||state.phase==='arcadeReel';
     ui.eggs.forEach((btn,index)=>{
       const lit=state.phase==='playing'&&index===state.target;
       btn.classList.toggle('lit',lit);
@@ -112,6 +125,7 @@
       btn.setAttribute('aria-label',`${index+1} 號金蛋${lit?'，正在發光':''}`);
     });
     ui.spots.forEach((spot,index)=>spot.classList.toggle('active',state.phase==='playing'&&index===state.target));
+    ui.eggs.forEach(btn=>btn.classList.toggle('available',state.phase==='arcadeChoose'));
   }
   function feedback(message,ms=1500){
     state.lastEvent=message;ui.message.textContent=message;
@@ -134,7 +148,8 @@
   function hideEffects(){
     clearTimeout(animationTimer);animationTimer=0;
     clearTimeout(flashTimer);ui.flash.classList.remove('show');
-    ui.reward.hidden=true;ui.countdown.hidden=true;
+    ui.reward.hidden=true;ui.countdown.hidden=true;ui.reel.hidden=true;ui.wheel.hidden=true;
+    ui.wheel.classList.remove('shuffling','picking');ui.reel.classList.remove('spinning');
   }
   function cancelFrame(){if(frame){cancelAnimationFrame(frame);frame=0;}}
   function showDialog(kind,opts){
@@ -171,8 +186,8 @@
     ui.info.textContent='看準亮起的金蛋，立即點擊！';
     ui.tips.textContent='下方六顆金蛋都能點擊遊玩';
     showDialog('intro',{
-      title:'砸金蛋',lead:'LUCKY EGGS · 街機手機版 V2',
-      description:'看準亮起的金蛋，快速點擊！<br>收集 <b>3 隻金雞</b>，挑戰超級大獎。<br>增加 <b>獎券、寶石、幸運大抽獎</b> 等演出。',
+      title:'砸金蛋',lead:'LUCKY EGGS · 手機版 V3.0.0',
+      description:'<b>街機選蛋：</b>觀察六顆金蛋 → 洗牌 → 選蛋 → 開獎，完成四回合。<br><b>經典／極速：</b>亮蛋反應挑戰，收集三隻金雞。<br>所有獎券皆為虛擬分數。',
       chooser:true,action:'🥚 開始砸金蛋',secondary:'先看看遊戲畫面'
     });
   }
@@ -183,12 +198,14 @@
       roundMs:CONFIG[state.mode].ms,remaining:CONFIG[state.mode].ms,
       target:-1,lastTarget:-1,nextTargetAt:0,targetExpires:0,
       endAt:0,countdownAt:0,countDisplay:0,locked:false,winPending:false,lastWrongAt:0,
+      arcadePicks:0,arcadeItems:[],arcadePhase:'',pendingArcade:null,arcadeRewardSettled:false,
       rewards:{golden:0,ticket:0,gem:0,lucky:0,coin:0,bomb:0}
     });
     ui.eggs.forEach(btn=>btn.classList.remove('cracked','missed'));
     ui.reward.hidden=true;
   }
   function begin(){
+    if(state.mode==='arcade'){beginArcade();return;}
     resetRound();state.plays++;safeSave();
     hideDialog();state.phase='countdown';
     state.countdownAt=performance.now()+3000;state.countDisplay=4;
@@ -244,6 +261,7 @@
     if(state.score>state.best){state.best=state.score;safeSave();}
   }
   function pause(){
+    if(state.mode==='arcade'){pauseArcade();return;}
     if(!['playing','countdown','prize'].includes(state.phase))return;
     if(state.phase==='playing')state.remaining=Math.max(0,state.endAt-performance.now());
     // For simplicity, a paused countdown restarts the 3-2-1 intro on resume.
@@ -255,6 +273,7 @@
     });
   }
   function resume(){
+    if(state.mode==='arcade'){resumeArcade();return;}
     if(state.phase!=='paused')return;
     if(state.winPending){hideDialog();finish(true);return;}
     hideDialog();state.target=-1;state.phase='countdown';
@@ -376,6 +395,7 @@
     return values[values.length-1];
   }
   function hit(index){
+    if(state.mode==='arcade'){hitArcade(index);return;}
     if(state.phase!=='playing'){
       if(state.phase==='idle'&&ui.modal.hidden)intro();
       else if(state.phase==='prize')toast('正在開獎，請看螢幕！');
@@ -402,7 +422,178 @@
     }
     render();
   }
+
+  // ── New V3 cabinet-style four-pick sequence, based on observable video scenes. ──
+  // The machine's unknown probability table is not reproduced; these are local non-monetary outcomes.
+  const arcadeExamples=[{kind:'ticket',amount:6},{kind:'ticket',amount:9},{kind:'ticket',amount:12},
+    {kind:'ticket',amount:20},{kind:'ticket',amount:36},{kind:'ticket',amount:54},
+    {kind:'ticket',amount:80},{kind:'gem',amount:2},{kind:'golden',amount:1},
+    {kind:'reel',amount:0},{kind:'empty',amount:0}];
+  let arcadeSession=0;
+  function makeArcadeItems(){
+    // Per-round six hidden prize outcomes, shuffled locally; no real-world redemption.
+    const items=[{kind:'empty',amount:0},{kind:'ticket',amount:6},
+      {kind:'ticket',amount:9},{kind:'ticket',amount:36},
+      arcadeExamples[Math.floor(random()*arcadeExamples.length)],
+      arcadeExamples[Math.floor(random()*arcadeExamples.length)]];
+    for(let i=items.length-1;i>0;i--){const j=Math.floor(random()*(i+1));[items[i],items[j]]=[items[j],items[i]];}
+    return items;
+  }
+  function face(item){
+    if(item.kind==='empty')return '☠';
+    if(item.kind==='reel')return '🎁';
+    if(item.kind==='golden')return '🐤';
+    if(item.kind==='gem')return '💎';
+    return String(item.amount);
+  }
+  function showArcadeFaces(reveal){
+    ui.cups.forEach((cup,i)=>{
+      cup.querySelector('span').textContent=reveal?'🎟':'🥚';
+      cup.querySelector('b').textContent=reveal?face(state.arcadeItems[i]):'?';
+    });
+  }
+  function beginArcade(){
+    resetRound();state.plays++;safeSave();hideDialog();state.arcadePicks=0;
+    state.gold=0;state.phase='arcadePreview';arcadeSession++;
+    ui.wheel.hidden=false;ui.reel.hidden=true;ui.countdown.hidden=true;
+    startArcadeRound();
+  }
+  function startArcadeRound(){
+    clearTimeout(animationTimer);animationTimer=0;ui.reel.hidden=true;ui.reward.hidden=true;
+    state.arcadeItems=makeArcadeItems();state.phase='arcadePreview';
+    ui.wheel.classList.add('preview');
+    feedback('四回合選蛋挑戰！看準金蛋再下手。',2500);
+    ui.wheel.hidden=false;ui.wheel.classList.remove('picking','shuffling');
+    ui.wheelTitle.textContent='盯著你想要的金蛋哦！';
+    ui.wheelProgress.textContent=`第 ${state.arcadePicks+1} / 4 次選蛋`;
+    ui.info.textContent='先記住獎勵，再等待金蛋洗牌！';
+    ui.tips.textContent='看畫面中的獎勵位置，洗牌後再敲下方金蛋';
+    showArcadeFaces(true);render();
+    const session=++arcadeSession;
+    animationTimer=setTimeout(()=>{
+      if(session!==arcadeSession||state.phase!=='arcadePreview')return;
+      state.phase='arcadeShuffle';ui.wheel.classList.remove('preview');ui.wheel.classList.add('shuffling');
+      ui.wheelTitle.textContent='金蛋洗牌中…';showArcadeFaces(false);render();
+      animationTimer=setTimeout(()=>{
+        if(session!==arcadeSession||state.phase!=='arcadeShuffle')return;
+        ui.wheel.classList.remove('shuffling');ui.wheel.classList.add('picking');
+        state.phase='arcadeChoose';ui.wheelTitle.textContent='選一顆金蛋！';
+        ui.info.textContent='請選擇下方任一顆金蛋';ui.tips.textContent='六顆金蛋都能敲，選一顆揭曉獎勵';
+        sfx('go');render();
+      },1250);
+    },1350);
+  }
+  function hitArcade(index){
+    if(state.phase==='arcadePreview'||state.phase==='arcadeShuffle'){toast('先觀察金蛋，等洗牌完成！');return;}
+    if(state.phase==='arcadeReel'||state.phase==='arcadeReveal'){toast('正在開獎，請看螢幕！');return;}
+    if(state.phase!=='arcadeChoose')return;
+    arcadeSession++;clearTimeout(animationTimer);
+    const item=state.arcadeItems[index];state.arcadePicks++;state.hits++;
+    state.pendingArcade=item;state.arcadeRewardSettled=false;
+    state.phase='arcadeReveal';ui.wheel.hidden=true;
+    ui.wheel.classList.remove('picking');
+    ui.eggs[index].classList.add('cracked');
+    setTimeout(()=>ui.eggs[index].classList.remove('cracked'),520);
+    ui.info.textContent=`第 ${state.arcadePicks} 顆金蛋開獎！`;
+    flash('🥚','中了！');sfx('hit');buzz([12,25,18]);sparks('#fff6a4',40,index);
+    render();
+    animationTimer=setTimeout(()=>{if(state.phase==='arcadeReveal')applyArcadeReward(item,index);},730);
+  }
+  function applyArcadeReward(item,index){
+    if(state.phase!=='arcadeReveal')return;
+    clearTimeout(animationTimer);state.arcadeRewardSettled=true;
+    const value=item.amount;
+    let title='金蛋開獎',hero='🥚',subtitle='虛擬遊戲獎勵',text='';
+    if(item.kind==='ticket'){
+      state.tickets+=value;state.rewards.ticket++;updateScore(value*2);
+      title='恭喜中了！';hero='🎟';text=`+${value}`;subtitle='張虛擬獎券';sfx('ticket');
+    }else if(item.kind==='gem'){
+      state.gems+=value;state.rewards.gem++;updateScore(value*35);
+      title='寶石獎勵！';hero='💎';text=`+${value}`;subtitle='顆寶石';sfx('gem');
+    }else if(item.kind==='golden'){
+      state.gold++;state.rewards.golden++;updateScore(100);
+      title='找到金雞！';hero='🐤';text='+100';subtitle='額外金雞獎勵分';sfx('gold');
+    }else if(item.kind==='reel'){
+      state.rewards.lucky++;showArcadeReel();return;
+    }else{
+      state.rewards.bomb++;title='空蛋';hero='☠️';text='+0';subtitle='本次沒有獲得獎券';sfx('miss');
+    }
+    ui.rewardHero.textContent=hero;ui.rewardKicker.textContent='LUCKY EGGS · 開獎';
+    ui.rewardTitle.textContent=title;ui.rewardValue.textContent=text;ui.rewardSubtitle.textContent=subtitle;
+    ui.reward.hidden=false;createTickets();render();
+    animationTimer=setTimeout(()=>{if(state.phase==='arcadeReveal'){ui.reward.hidden=true;advanceArcade();}},1750);
+  }
+  function showArcadeReel(){
+    state.phase='arcadeReel';ui.reward.hidden=true;ui.reel.hidden=false;
+    ui.reel.classList.add('spinning');ui.reelWin.textContent='抽獎進行中…';
+    const possible=[20,40,60,80];const selected=possible[Math.floor(random()*possible.length)];
+    state.pendingArcade=selected;
+    // Commit reward before animation so app backgrounding cannot silently lose it.
+    state.tickets+=selected;updateScore(selected*3);
+    const slots=[...ui.reelSlots.children];slots.forEach(s=>s.classList.remove('winner'));
+    // The strip animation is decorative; the sampled final result is stored once.
+    let counter=0;const session=++arcadeSession;
+    const spin=()=>{
+      if(state.phase!=='arcadeReel'||session!==arcadeSession)return;
+      counter++;slots.forEach((s,i)=>{s.textContent=`🎟 ${possible[(counter+i)%4]}`;});
+      if(counter<14){animationTimer=setTimeout(spin,130);return;}
+      ui.reel.classList.remove('spinning');
+      slots.forEach((s,i)=>{s.textContent=`🎟 ${possible[i]}`;s.classList.toggle('winner',possible[i]===selected);});
+      ui.reelWin.textContent=`🎉 中大獎！+${selected} 張`;
+      sfx('win');sparks('#aaf9ff',70);render();
+      animationTimer=setTimeout(()=>{if(state.phase==='arcadeReel'){ui.reel.hidden=true;advanceArcade();}},1650);
+    };
+    render();animationTimer=setTimeout(spin,160);
+  }
+  function advanceArcade(){
+    if(state.mode!=='arcade'||!['arcadeReel','arcadeReveal'].includes(state.phase))return;
+    clearTimeout(animationTimer);animationTimer=0;ui.reward.hidden=true;ui.reel.hidden=true;
+    if(state.arcadePicks>=4){finishArcade(false);return;}
+    startArcadeRound();
+  }
+  function pauseArcade(){
+    if(!['arcadePreview','arcadeShuffle','arcadeChoose','arcadeReveal','arcadeReel'].includes(state.phase))return;
+    const prev=state.phase;arcadeSession++;clearTimeout(animationTimer);
+    state.arcadePhase=prev;state.phase='paused';
+    ui.reel.hidden=true;ui.reward.hidden=true;ui.wheel.hidden=true;
+    showDialog('pause',{title:'暫停遊戲',lead:'PAUSED',deco:'⏸ 🥚 ⏸',
+      description:`已選 <b>${state.arcadePicks}/4</b> 顆<br>虛擬獎券 <b>${state.tickets}</b> 張 · 得分 <b>${state.score}</b>`,
+      action:'▶ 繼續遊戲',secondary:'結束本局'});render();
+  }
+  function resumeArcade(){
+    if(state.phase!=='paused')return;hideDialog();
+    if(state.arcadePhase==='arcadeChoose'){
+      state.phase='arcadeChoose';ui.wheel.hidden=false;ui.wheel.classList.remove('preview');
+      ui.wheel.classList.add('picking');ui.wheelTitle.textContent='選一顆金蛋！';
+      showArcadeFaces(false);render();return;
+    }
+    if(state.arcadePhase==='arcadeReveal'||state.arcadePhase==='arcadeReel'){
+      state.phase='arcadeReveal';
+      // Resume unapplied prize safely; never award an already applied prize twice.
+      if(!state.arcadeRewardSettled&&state.pendingArcade&&typeof state.pendingArcade==='object'){
+        applyArcadeReward(state.pendingArcade);
+      }else advanceArcade();
+      return;
+    }
+    startArcadeRound();
+  }
+  function finishArcade(quit=false){
+    if(state.phase==='result')return;
+    arcadeSession++;clearTimeout(animationTimer);hideEffects();cancelFrame();
+    state.phase='result';state.target=-1;state.wins+=quit?0:1;
+    if(!quit&&state.arcadePicks===4)updateScore(80);
+    safeSave();render();
+    ui.info.textContent='本局結算完成！';ui.tips.textContent='挑戰完成，點擊開始新的一局';
+    showDialog('result',{
+      title:quit?'提前結束':'🎉 選蛋完成！',lead:'LUCKY EGGS · 4 PICKS',deco:'🎟 🥚 🎟',
+      description:quit?'你提前結束本局，已取得的虛擬分數仍保留。':
+        '四次金蛋已開獎！獎券僅為遊戲內的虛擬數字。',
+      stats:`<span>🏆 得分 ${state.score}</span><span>🥚 選蛋 ${state.arcadePicks}/4</span><span>🎟 獎券 ${state.tickets}</span><span>💎 寶石 ${state.gems}</span><span>🐤 金雞 ${state.gold}</span><span>✨ 大抽獎 ${state.rewards.lucky} 次</span>`,
+      action:'🥚 再玩四回合',secondary:'回到主畫面',share:true
+    });
+  }
   function finish(win,quit=false){
+    if(state.mode==='arcade'){finishArcade(quit);return;}
     if(state.phase==='result')return;
     cancelFrame();hideEffects();
     if(state.phase==='playing')state.remaining=Math.max(0,state.endAt-performance.now());
@@ -424,19 +615,19 @@
     });
   }
   function help(){
-    if(['playing','countdown','prize'].includes(state.phase))pause();
+    if(['playing','countdown','prize','arcadePreview','arcadeShuffle','arcadeChoose','arcadeReveal','arcadeReel'].includes(state.phase))pause();
     showDialog('help',{
       title:'遊戲說明',lead:'HOW TO PLAY',deco:'🕹️ 🥚 🎟',
-      description:'① <b>3、2、1</b> 倒數後開始敲蛋。<br>② 六顆蛋輪流發光，立即敲擊下方對應位置。<br>③ 獎勵包含 <b>獎券、寶石、金雞、空蛋</b>。<br>④ 觸發 <b>幸運大抽獎</b> 會停錶播放開獎動畫。<br>⑤ 收集 <b>3 隻金雞</b> 即成功，剩餘時間結束則結算。<br>⑥ 電腦可用 <b>1～6</b> 數字鍵，空白鍵暫停。',
+      description:'<b>街機選蛋：</b>① 先看六個獎勵 ② 等待金蛋洗牌 ③ 選一顆金蛋 ④ 觀看開獎／抽獎 ⑤ 共進行四回合。<br><b>經典／極速：</b>點擊亮起的金蛋，集滿三隻金雞。<br>桌面鍵盤可按 <b>1～6</b> 選蛋，空白鍵暫停。',
       action:state.phase==='paused'?'▶ 返回繼續':'🥚 開始新遊戲',
       secondary:state.phase==='paused'?'結束本局':'返回主畫面',
-      note:'遊戲時間、出蛋速度、加分公式、中獎機率均為手機版自行設計；僅參考使用者三部實拍影片可見的互動、視覺與開獎流程。'
+      note:'街機影片可觀察到六顆蛋、0/4、開獎及幸運大抽獎；真實機率與結算規則未知。本版採自訂機率及虛擬分數。'
     });
   }
   async function share(){
-    const summary=`砸金蛋 Lucky Eggs V2\n模式：${CONFIG[state.mode].name}\n得分：${state.score}\n獎券：${state.tickets}｜寶石：${state.gems}\n金雞：${state.gold}/3｜最大連擊：${state.maxCombo}\n免費娛樂試玩，無真實兌獎。`;
+    const summary=`砸金蛋 Lucky Eggs V3\n模式：${CONFIG[state.mode].name}\n得分：${state.score}\n獎券：${state.tickets}｜寶石：${state.gems}\n金雞：${state.gold}/3｜最大連擊：${state.maxCombo}\n免費娛樂試玩，無真實兌獎。`;
     try{
-      if(navigator.share){await navigator.share({title:'砸金蛋 V2 成績',text:summary});return;}
+      if(navigator.share){await navigator.share({title:'砸金蛋 V3 成績',text:summary});return;}
       if(navigator.clipboard?.writeText){await navigator.clipboard.writeText(summary);toast('已複製成績，可貼到 LINE！');return;}
       const t=document.createElement('textarea');t.value=summary;t.style.position='fixed';t.style.left='-9999px';
       document.body.appendChild(t);t.select();document.execCommand('copy');t.remove();toast('已複製成績文字！');
@@ -448,6 +639,7 @@
       btn.addEventListener('contextmenu',e=>e.preventDefault());
     });
     ui.start.addEventListener('click',()=>{
+      if(['arcadePreview','arcadeShuffle','arcadeChoose'].includes(state.phase)){pause();return;}
       if(state.phase==='playing')pause();
       else if(state.phase==='paused')resume();
       else if(state.phase==='idle'||state.phase==='result')begin();
@@ -470,27 +662,29 @@
       if(e.repeat||e.altKey||e.ctrlKey||e.metaKey)return;
       if(/^[1-6]$/.test(e.key)){e.preventDefault();hit(+e.key-1);}
       if(e.code==='Space'){e.preventDefault();
-        if(state.phase==='playing')pause();else if(state.phase==='paused')resume();
+        if(['playing','arcadePreview','arcadeShuffle','arcadeChoose'].includes(state.phase))pause();else if(state.phase==='paused')resume();
         else if(state.phase==='idle'||state.phase==='result')begin();
       }
-      if(e.key==='Escape'&&state.phase==='playing')pause();
+      if(e.key==='Escape'&&['playing','arcadePreview','arcadeShuffle','arcadeChoose'].includes(state.phase))pause();
     });
     document.addEventListener('visibilitychange',()=>{
-      if(document.hidden&&['playing','countdown','prize'].includes(state.phase))pause();
+      if(document.hidden&&['playing','countdown','prize','arcadePreview','arcadeShuffle','arcadeChoose','arcadeReel','arcadeReveal'].includes(state.phase))pause();
     });
     window.addEventListener('resize',resizeCanvas,{passive:true});
-    window.addEventListener('pagehide',()=>{if(state.phase==='playing')pause();});
+    window.addEventListener('pagehide',()=>{if(['playing','arcadeChoose','arcadePreview','arcadeShuffle'].includes(state.phase))pause();});
     if('serviceWorker' in navigator&&location.protocol!=='file:')window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));
   }
   load();state.roundMs=CONFIG[state.mode].ms;state.remaining=state.roundMs;
   selectMode(state.mode);resizeCanvas();render();bind();intro();
   // Console-only hook for deterministic local QA. No external service or network connection.
-  if(location.protocol==='file:'||location.hostname==='localhost'||location.hostname==='127.0.0.1'){
+  if(location.protocol==='file:'||location.protocol==='about:'||location.hostname==='localhost'||location.hostname==='127.0.0.1'){
     window.__LUCKY_EGGS_TEST__={getState:()=>({...state,rewards:{...state.rewards}}),
       forceTarget:(i=0)=>{if(state.phase==='playing'){state.target=i;state.targetExpires=performance.now()+4000;render();}},
       forceReward:(r)=>{const map={gold:.03,ticket:.23,gem:.42,draw:.58,bomb:.70,coin:.90};if(r in map){const orig=random;random=()=>map[r];try{hit(state.target<0?0:state.target);}finally{random=orig;}}},
       setRemaining:(ms)=>{if(state.phase==='playing'){state.remaining=ms;state.endAt=performance.now()+ms;render();}},
-      skipCountdown:()=>{if(state.phase==='countdown')startActive(performance.now());}
+      skipCountdown:()=>{if(state.phase==='countdown')startActive(performance.now());},
+      chooseArcade:(i=0,kind=null)=>{if(state.phase==='arcadeChoose'){if(kind){const it=arcadeExamples.find(x=>x.kind===kind);if(it)state.arcadeItems[i]={...it};}hitArcade(i);}},
+      skipArcadeIntro:()=>{if(['arcadePreview','arcadeShuffle'].includes(state.phase)){clearTimeout(animationTimer);arcadeSession++;state.phase='arcadeChoose';ui.wheel.hidden=false;ui.wheel.classList.remove('shuffling');ui.wheel.classList.add('picking');showArcadeFaces(false);render();}}
     };
   }
 })();

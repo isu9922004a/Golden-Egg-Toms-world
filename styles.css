@@ -102,3 +102,36 @@
 .scene-info{top:11.7%;left:23%;width:73%;max-width:none;font-size:clamp(11px,2.8vw,14px)}
 .reward-stage{background:radial-gradient(circle at 50% 39%,#b346db 0,#5b228d 45%,#18052f 88%)}
 .logo-cn{color:#fff8fa;-webkit-text-stroke:1.8px #7842a6;text-shadow:1px 2px #50159a,-1px -1px #f7cdff,0 0 10px #ffffffaa}
+
+/* V3: filmed cabinet-inspired 6-cup roulette and 4-slot ticket draw. Original artwork in CSS. */
+.arcade-wheel[hidden],.lottery-reel[hidden]{display:none!important}
+.arcade-wheel{position:absolute;z-index:7;inset:19% 1.5% 19% 10%;display:flex;flex-direction:column;align-items:center;justify-content:center;pointer-events:none;background:radial-gradient(ellipse at 50% 58%,#122c82e8,#191052bd 71%,transparent 96%);border-radius:28px;filter:drop-shadow(0 0 15px #38bfff80)}
+.wheel-title{z-index:2;padding:4px 12px;border-radius:100px;font-weight:1000;font-size:clamp(13px,3.5vw,19px);color:#fcffff;background:linear-gradient(90deg,#183292b0,#7d31b8dc,#183292b0);text-shadow:0 0 8px #7de7ff;letter-spacing:.02em;box-shadow:0 0 12px #71beff80}
+.wheel-disc{position:relative;width:min(96%,320px);max-height:83%;aspect-ratio:1;border-radius:50%;border:6px solid #829fff;box-shadow:0 0 18px #21aeff,inset 0 0 38px #03beff;background:radial-gradient(circle,#67eaff 0 8%,#082974 9% 19%,#2f61ba 20% 24%,#1b2d81 36%,#281071 70%,#1a185a 80%);animation:wheelBreath 2.8s infinite alternate}
+.wheel-disc:before{content:"";position:absolute;inset:2%;border:2px dashed #bcf9ff99;border-radius:50%;pointer-events:none}
+.wheel-core{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:20%;aspect-ratio:1;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-direction:column;color:#ccfdff;font-size:clamp(22px,7vw,34px);text-shadow:0 0 14px #2ac9ff;border:3px solid #b6f7ff;background:radial-gradient(circle,#0573c8,#061445);box-shadow:0 0 19px 8px #00c7ff55}
+.wheel-core small{font-size:9px;letter-spacing:1px;color:#fff}
+.wheel-cup{position:absolute;transform:translate(-50%,-50%);width:25%;aspect-ratio:1;border-radius:50%;border:3px solid #91daff;box-shadow:0 0 12px #45bbfbbb, inset 0 0 8px #86f3ff;background:radial-gradient(circle at 50% 36%,#4bc2fe,#162c8e 63%,#380c69);display:flex;flex-direction:column;align-items:center;justify-content:center;transition:filter .2s}
+.wheel-cup span{font-size:clamp(19px,6vw,32px);line-height:1;filter:drop-shadow(0 0 5px #fff38d)}.wheel-cup b{font-size:clamp(12px,3vw,18px);line-height:1.1;color:#ffef82;text-shadow:0 0 5px #ecfdff}
+.wc1{left:27%;top:17%}.wc2{left:73%;top:17%}.wc3{left:11%;top:51%}.wc4{left:89%;top:51%}.wc5{left:29%;top:81%}.wc6{left:71%;top:81%}
+.arcade-wheel.shuffling .wheel-disc{animation:arcadeSpin .5s ease-in-out 2, wheelBreath .7s infinite alternate}.arcade-wheel.shuffling .wheel-cup{filter:blur(2px) brightness(1.5)}
+.arcade-wheel.picking .wheel-cup{animation:cupPulse 1.1s infinite alternate}.wheel-progress{padding:3px 10px;border-radius:30px;background:#080d49cc;border:1px solid #8bdbff;color:#f8efff;font-size:clamp(10px,2.7vw,13px);font-weight:900;letter-spacing:.04em}
+.arcade-wheel.picking~.center-flash{z-index:11}.cabinet.arcade-mode .scene-info{top:10%;left:24%;background:#052f74cd;border-color:#65d9ff;color:#dcffff}.cabinet.arcade-mode .scene-message{color:#dcffff}
+.cabinet.arcade-mode .video-scene{background-image:linear-gradient(170deg,#0640a45e,#2d00503d 50%,#14026477),url('./assets/arcade-stage.webp')}
+.cabinet.arcade-mode .stage-spot.active{opacity:0}.cabinet.arcade-mode .egg-button.available .ring{box-shadow:0 0 14px #5afaff,0 0 22px #ffe571}.cabinet.arcade-mode .egg-button.available{filter:drop-shadow(0 0 9px #fff4bc)}
+.lottery-reel{position:absolute;z-index:12;inset:17% 3% 16% 12%;display:flex;align-items:center;justify-content:space-evenly;flex-direction:column;border:3px solid #8ee5ff;border-radius:20px;background:radial-gradient(ellipse at center,#1335c5ee 0%,#131367f7 64%,#210848f7);box-shadow:0 0 22px #4eecff,inset 0 0 36px #05cbff70;pointer-events:none;overflow:hidden}
+.lottery-reel:before{content:"";position:absolute;inset:0;background:repeating-conic-gradient(from 3deg,#24c6ff22 0 9deg,transparent 9deg 18deg);animation:reelAuras 8s linear infinite}
+.reel-head,.reel-hint,.reel-slots,.reel-win{position:relative;z-index:1}.reel-head{font-size:clamp(22px,6.2vw,32px);font-weight:1000;color:#fff2b9;text-shadow:2px 4px #cf3193,0 0 12px #5cfbff}.reel-hint{font-size:12px;letter-spacing:3px;color:#c3f9ff}.reel-slots{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));width:95%;gap:4px}.reel-slots span{display:flex;align-items:center;justify-content:center;min-width:0;height:58px;padding:3px 1px;border:3px solid #94f2ff;border-radius:11px;background:linear-gradient(#6ccffe,#0985c8 49%,#1e1d7e);color:#fff9bf;font-weight:1000;font-size:clamp(12px,2.8vw,17px);white-space:nowrap;box-shadow:0 0 12px #79dfff}.lottery-reel.spinning .reel-slots span{animation:slotFlicker .21s infinite alternate}.reel-slots span.winner{background:linear-gradient(#fff8b8,#ffc23d 55%,#ed721f);border-color:white;color:#632100;box-shadow:0 0 20px #ffe682;transform:scale(1.08)}.reel-win{font-size:clamp(23px,6.8vw,36px);font-weight:1000;color:#fff3b1;text-shadow:0 0 8px #fff,0 3px #db3cb6}
+@keyframes wheelBreath{from{box-shadow:0 0 11px #21aeff,inset 0 0 25px #03beff}to{box-shadow:0 0 27px #5debff,inset 0 0 45px #37caff}}
+@keyframes arcadeSpin{0%{transform:rotate(0deg)}45%{transform:rotate(35deg)}65%{transform:rotate(-27deg)}100%{transform:rotate(0deg)}}
+@keyframes cupPulse{to{box-shadow:0 0 18px 5px #ffe586, inset 0 0 12px #bcf2ff}}
+@keyframes reelAuras{to{transform:rotate(360deg)}}@keyframes slotFlicker{to{filter:brightness(1.7);transform:translateY(-3px)}}
+/* Preserve touch targets and contrast on iPhone, and respect motion settings. */
+@media (max-height:740px){.wheel-title{font-size:12px;padding:3px 7px}.wheel-disc{max-height:78%}.reel-slots span{height:39px}.reel-head{font-size:20px}.wheel-progress{font-size:10px}}
+@media (prefers-reduced-motion:reduce){.wheel-disc,.wheel-cup,.lottery-reel:before,.reel-slots span{animation:none!important}}
+
+.mode-chooser{grid-template-columns:repeat(3,minmax(0,1fr));gap:5px}.mode-choice{padding:8px 2px;min-height:58px}.mode-choice b{font-size:clamp(11px,2.9vw,15px)}.mode-choice small{font-size:clamp(8px,2.1vw,11px)}
+
+.cabinet.arcade-mode .stage-message{display:none}
+.arcade-wheel.preview .wheel-cup span{display:block;background:none;box-shadow:none;width:auto;height:auto;min-width:0;min-height:0;font-size:clamp(19px,6vw,30px);filter:drop-shadow(0 0 6px #95f4ff)}
+.arcade-wheel:not(.preview) .wheel-cup span{display:block;width:31%;height:39%;min-width:16px;min-height:19px;background:radial-gradient(ellipse at 30% 19%,#fffdd4,#ffe843 39%,#fab310 71%,#b85b00);border-radius:52% 52% 45% 45%/58% 58% 42% 42%;font-size:0;box-shadow:inset -2px -3px 6px #9d5200,0 0 7px #ffd869;filter:none}
