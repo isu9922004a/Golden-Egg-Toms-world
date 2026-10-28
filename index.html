@@ -1,130 +1,148 @@
 <!doctype html>
 <html lang="zh-Hant">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
-  <meta name="theme-color" content="#261054">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="砸金蛋 V3">
-  <meta name="description" content="六顆金蛋觸控遊戲：敲蛋、集獎券、獲得寶石、挑戰三隻金雞與幸運大抽獎。無付費及兌現。">
-  <link rel="manifest" href="./manifest.webmanifest">
-  <link rel="icon" href="./assets/icon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="./styles.css">
-  <script src="./game.js" defer></script>
-  <title>砸金蛋 Lucky Eggs V3｜手機街機遊戲</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="theme-color" content="#07182b">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>鑽石球場 '07｜手機棒球遊戲</title>
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="apple-touch-icon" href="./icon-192.png">
+<style>
+:root{--gold:#ffd978;--light:#eaf7ff;--blue:#18c4f0;--red:#ef5365;--ink:#06121e}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}html,body{height:100%;margin:0;overflow:hidden;background:#030d16;color:#fff;font-family:system-ui,-apple-system,"PingFang TC","Noto Sans TC",sans-serif;touch-action:manipulation}button{font:inherit;color:inherit;border:0;cursor:pointer;touch-action:manipulation}button:focus-visible{outline:2px solid #fff;outline-offset:2px}
+#app{position:relative;width:min(100vw,540px);height:100dvh;min-height:480px;max-height:100dvh;margin:0 auto;overflow:hidden;isolation:isolate;background:#072132;box-shadow:0 0 60px #0009}#field{position:absolute;inset:0;width:100%;height:100%;display:block}#vignette{position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg,rgba(0,8,20,.4) 0%,transparent 29%,transparent 60%,rgba(0,7,16,.62) 100%)}.hidden{display:none!important}
+#hud{position:absolute;top:0;left:0;right:0;padding:calc(env(safe-area-inset-top) + 8px) 12px 0;z-index:6;pointer-events:none}.scoreboard{background:linear-gradient(145deg,#172f48ee,#091828f2);border:1px solid #8cc2d555;border-radius:12px;box-shadow:0 8px 26px #0008;display:grid;grid-template-columns:1fr auto;gap:6px;padding:10px 12px}.score-left{display:grid;gap:4px}.teamrow{display:flex;align-items:center;justify-content:space-between;gap:8px;max-width:210px;font-size:12px;font-weight:800}.teamrow b{font-size:21px;font-variant-numeric:tabular-nums}.teamrow .team-name{display:flex;align-items:center;gap:6px}.teammark{display:inline-block;width:8px;height:8px;border-radius:2px;background:#23c6ed;box-shadow:0 0 9px #23c6ed88}.teammark.orange{background:#ffb14e;box-shadow:0 0 9px #ffb14e88}.score-right{display:flex;align-items:center;gap:11px}.inning-box{text-align:center;border-left:1px solid #ffffff23;padding-left:9px}.inning-box strong{font-size:20px;display:block;line-height:1}.little{font-size:10px;color:#c3d5de;font-weight:800;letter-spacing:.09em}.basechart{width:50px;height:51px;position:relative;transform:rotate(45deg);margin:3px 6px 3px 0}.base{position:absolute;width:15px;height:15px;background:#324959;border:1.5px solid #d2deea;transform:scale(.9);border-radius:2px}.base.lit{background:#ffe47b;box-shadow:0 0 12px #ffcf68}.base.b1{top:22px;left:29px}.base.b2{top:3px;left:29px}.base.b3{top:3px;left:10px}.stats-row{display:flex;align-items:center;justify-content:space-between;margin:7px 2px 0;gap:8px}.pill{background:#061b2adc;border:1px solid #82c0d75b;padding:5px 9px;border-radius:7px;font-weight:900;font-size:12px;letter-spacing:.04em}.lamp{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:4px;background:#3b4e5b}.lamp.on.green{background:#57e2a3;box-shadow:0 0 6px #57e2a3}.lamp.on.yellow{background:#ffda66;box-shadow:0 0 6px #ffda66}.lamp.on.red{background:#ff686b;box-shadow:0 0 6px #ff686b}#pauseBtn{pointer-events:auto;display:grid;place-items:center;width:33px;height:30px;border:1px solid #9ed3e77b;background:#0c2634ed;border-radius:8px;font-size:15px}
+#message{position:absolute;top:29%;left:6%;right:6%;z-index:8;text-align:center;pointer-events:none;filter:drop-shadow(0 4px 5px #000)}#message .msg-title{font-size:clamp(25px,8vw,43px);font-weight:1000;font-style:italic;letter-spacing:.06em;color:var(--gold);-webkit-text-stroke:.7px #fff6;text-shadow:2px 3px #091725,0 0 18px #efc15444}#message .msg-sub{display:inline-block;background:#071a2be9;border:1px solid #ffffff60;border-radius:99px;padding:6px 14px;font-weight:800;font-size:12px;margin-top:8px}
+.controls{position:absolute;bottom:0;left:0;right:0;z-index:7;padding:10px 14px calc(env(safe-area-inset-bottom) + 15px);background:linear-gradient(180deg,transparent,#06131beb 20%,#05121df8);text-shadow:0 1px 3px #000}.controls-heading{display:flex;justify-content:space-between;align-items:center;font-size:12px;gap:8px;margin:7px 0 10px;color:#deecf4}.controls-heading strong{color:#fff;font-size:14px}.control-row{display:flex;gap:12px;align-items:stretch}.direction{flex:1;min-width:0;display:grid;grid-template-columns:repeat(3,1fr);gap:6px;align-content:center}.mini-button{height:42px;border:1px solid #72a3b17d;border-radius:9px;background:#152c3fe5;font-size:12px;font-weight:800}.mini-button.active{color:#091723;background:linear-gradient(#ffecae,#f6be58);border-color:#fff0c5;box-shadow:0 0 12px #ffe49b57}.action{min-width:116px;padding:13px 20px;border-radius:15px;color:#fff;background:linear-gradient(160deg,#fa7b48,#cf293e);border:2px solid #ffc0a5;box-shadow:0 5px 0 #75202c,0 8px 18px #0008;text-shadow:0 2px 2px #471b19;font-size:23px;font-weight:1000;letter-spacing:.03em;white-space:nowrap}.action:active{transform:translateY(3px);box-shadow:0 2px 0 #75202c}.action.blue{background:linear-gradient(160deg,#36c5eb,#116a9d);border-color:#9ef5ff;box-shadow:0 5px 0 #10344a,0 8px 18px #0008}.timing{height:8px;margin:5px 0 10px;border-radius:99px;overflow:hidden;background:#122b3d;border:1px solid #98c5da70;position:relative}.timing .sweet{position:absolute;left:69%;width:23%;height:100%;background:#e9c94c}.timing #timingFill{position:absolute;left:0;top:0;bottom:0;width:0;background:linear-gradient(90deg,#3caaf0,#a6f7ff)}
+#controlsPitch{padding-bottom:calc(env(safe-area-inset-bottom) + 12px)}.pitch-layout{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:center}.pitch-zone{display:grid;grid-template-columns:repeat(3,38px);grid-template-rows:repeat(3,30px);gap:3px;padding:7px;border:1px solid #eaf9ff6b;background:#0d2a3fd1;border-radius:12px;width:max-content}.zonecell{border:1px solid #a8c0d47a;background:#ffffff18;border-radius:3px}.zonecell.active{background:#ffd76d;box-shadow:inset 0 0 0 2px #fff;color:#092036}.pitch-options{display:grid;grid-template-columns:repeat(3,1fr);gap:5px}.pitch-options .mini-button{font-size:11px;height:37px}.pitch-meter{height:13px;position:relative;margin-top:10px;background:linear-gradient(90deg,#ab344b 0%,#eac26b 32%,#4adea2 46%,#4adea2 54%,#eac26b 68%,#ab344b 100%);border:2px solid #d8ecf5;border-radius:10px;overflow:hidden}.pitch-meter:after{content:"";position:absolute;left:var(--meter-pos,50%);height:100%;top:0;width:5px;background:white;box-shadow:0 0 5px #000;transform:translateX(-50%)}.pitchbottom{display:flex;gap:12px;align-items:center;margin-top:10px}.pitchbottom .action{min-width:118px}.pitchbottom small{font-size:11px;line-height:1.4;color:#e0edf1}
+#catchControls{position:absolute;bottom:calc(env(safe-area-inset-bottom) + 35px);left:0;right:0;display:flex;align-items:center;justify-content:center;z-index:7;gap:10px}.catchhint{font-size:13px;text-shadow:0 2px 4px #000;max-width:110px;font-weight:800}.catchbutton{background:linear-gradient(#3ce6bc,#16857a);border:2px solid #cbfff4;box-shadow:0 6px 0 #07574e,0 8px 15px #0008;border-radius:18px;padding:18px 28px;font-size:24px;font-weight:1000}
+.screen{position:absolute;inset:0;z-index:10;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;overflow-y:auto;background:linear-gradient(170deg,#020e20a8,#031323bd 65%,#020e20f0);padding:calc(env(safe-area-inset-top) + 24px) 24px calc(env(safe-area-inset-bottom) + 18px)}.screen h1{font-size:clamp(40px,12vw,61px);font-weight:1000;letter-spacing:-.055em;font-style:italic;line-height:.96;text-shadow:3px 5px #052638,0 8px 22px #000;margin:15px 0 8px}.screen h1 span{display:block;color:#ffda76;text-shadow:2px 3px #a75228,0 8px 20px #000}.overline{letter-spacing:.35em;font-size:10px;color:#93dbe6;font-weight:1000}.subline{font-size:13px;color:#c9e3e9;line-height:1.6;margin:8px 0 20px;max-width:340px}.hero-ball{font-size:58px;filter:drop-shadow(0 8px 12px #000);animation:float 2.8s ease-in-out infinite alternate}@keyframes float{from{transform:translateY(-3px)}to{transform:translateY(7px)}}.menu-panel{background:#041b30e6;border:1px solid #5a9cbf88;padding:16px;border-radius:18px;width:min(100%,350px);box-shadow:0 16px 40px #0009}.setting-label{text-align:left;color:#b0d1df;font-size:11px;font-weight:900;letter-spacing:.09em;margin:3px 0 7px}.seg{display:flex;gap:6px;margin-bottom:12px}.seg button{flex:1;border-radius:8px;background:#193750;border:1px solid #77a3bc64;font-size:12px;padding:10px 5px;font-weight:900}.seg button.active{background:#f1c765;color:#122538;border-color:#fff4be}.menu-start{display:block;width:100%;padding:13px;margin-top:5px;border-radius:11px;background:linear-gradient(160deg,#ffe28e,#edaa42);color:#092039;font-size:18px;font-weight:1000;box-shadow:0 4px 0 #805321}.menu-start.secondary{background:linear-gradient(150deg,#2c9bb8,#155779);color:#fff;box-shadow:0 4px 0 #0a3248;font-size:15px}.menu-tip{font-size:10px;color:#9ebbc7;margin:14px 0 0;line-height:1.5}.overlay-card{max-width:355px;width:100%;background:linear-gradient(140deg,#103650f2,#071929f5);border:1px solid #8acfe5ad;border-radius:19px;padding:24px 20px;box-shadow:0 15px 45px #000c}.overlay-card h2{font-size:30px;color:#ffda80;margin:6px 0 12px;font-weight:1000}.overlay-card p{font-size:14px;color:#e5f4f5;line-height:1.6;margin:8px 0 16px}.overlay-card .score-final{font-size:40px;font-weight:1000;letter-spacing:.05em}.overlay-card .extra{font-size:12px;color:#a9d1e2;line-height:1.6}.overlay-actions{display:grid;gap:10px}.overlay-actions button{padding:14px;border-radius:11px;font-weight:1000;background:#edb960;color:#0e2538}.overlay-actions button.alt{background:#1b4b67;color:#dbefff;border:1px solid #77b7d0}
+#floatingHint{position:absolute;top:23%;width:100%;text-align:center;font-size:13px;font-weight:800;pointer-events:none;text-shadow:0 2px 6px #000;z-index:5;color:#f4e9bf}#brand{position:absolute;top:15%;left:0;right:0;text-align:center;letter-spacing:.35em;font-size:11px;color:#cde8e5a3;pointer-events:none}#fieldTag{position:absolute;right:12px;top:calc(env(safe-area-inset-top) + 116px);z-index:4;font-size:9px;letter-spacing:.12em;color:#c4e1e2a6}#footInfo{position:absolute;bottom:calc(env(safe-area-inset-bottom) + 2px);left:0;right:0;text-align:center;color:#ffffff6a;font-size:9px;pointer-events:none;z-index:3}
+@media(max-height:665px){.screen h1{font-size:42px}.hero-ball{font-size:40px}.screen{padding-top:25px}.subline{margin:5px 0 10px}.menu-panel{padding:12px}.seg button{padding:7px}.menu-start{padding:9px}.controls{padding-top:5px}.controls-heading{margin:2px 0 4px}.scoreboard{padding:7px}.pitch-zone{grid-template-columns:repeat(3,33px);grid-template-rows:repeat(3,24px)}}
+@media(min-width:541px){body{display:flex;align-items:center;justify-content:center}#app{height:min(94dvh,920px);border-radius:22px;border:1px solid #375668}}
+</style>
 </head>
-<body>
-<main class="cabinet" id="app" aria-label="砸金蛋手機街機">
-  <header class="marquee" aria-label="砸金蛋 Lucky Eggs">
-    <div class="little-egg left" aria-hidden="true">✦</div>
-    <div class="logo"><span class="logo-cn">砸金蛋</span><span class="logo-en">LUCKY EGGS <small>V3</small></span></div>
-    <div class="little-egg right" aria-hidden="true">✦</div>
-    <button class="round-icon audio-button" id="audioButton" type="button" aria-label="切換遊戲音效">🔊</button>
-    <button class="round-icon help-button" id="helpButton" type="button" aria-label="查看玩法說明">?</button>
-  </header>
-
-  <div class="scorebar" aria-label="遊戲狀態">
-    <div class="score-cell jackpot-cell"><span class="score-label">JACKPOT</span><b>★<span id="jackpotValue">490</span></b></div>
-    <div class="score-cell"><span class="score-label">得分 SCORE</span><b id="scoreValue">0000</b></div>
-    <div class="score-cell golden-cell"><span class="score-label" id="goalLabel">金雞 GOLDEN</span><b><span id="goldValue">0</span><small> / 3</small> <span id="goalIcon">🐤</span></b></div>
-    <div class="score-cell time-cell"><span class="score-label" id="timerLabel">倒數 TIME</span><b id="timeValue">60</b></div>
-  </div>
-
-  <section class="video-scene" id="scene" aria-label="遊戲動畫螢幕">
-    <div class="ribbon-left" aria-label="集滿三隻金雞，挑戰超級大獎"><span>➜</span><strong>集滿 <em>3</em> 隻金雞</strong><strong>挑戰超級大獎</strong></div>
-    <div class="scene-lights" aria-hidden="true"></div>
-    <div class="arcade-status"><span class="status-led"></span><span id="modeLabel">經典模式 · 60 秒</span></div>
-    <div class="scene-info" id="sceneInfo" aria-live="polite">看準亮起的金蛋，立即點擊！</div>
-    <div class="stage-spot s1" data-stage="0"><span>1</span></div>
-    <div class="stage-spot s2" data-stage="1"><span>2</span></div>
-    <div class="stage-spot s3" data-stage="2"><span>3</span></div>
-    <div class="stage-spot s4" data-stage="3"><span>4</span></div>
-    <div class="stage-spot s5" data-stage="4"><span>5</span></div>
-    <div class="stage-spot s6" data-stage="5"><span>6</span></div>
-    <div class="arcade-wheel" id="arcadeWheel" hidden aria-live="polite" aria-label="街機選蛋輪盤">
-      <div class="wheel-title" id="wheelTitle">盯著你想要的金蛋！</div>
-      <div class="wheel-disc"><div class="wheel-core">✦<small>LUCKY</small></div>
-        <div class="wheel-cup wc1"><span>🥚</span><b>?</b></div>
-        <div class="wheel-cup wc2"><span>🥚</span><b>?</b></div>
-        <div class="wheel-cup wc3"><span>🥚</span><b>?</b></div>
-        <div class="wheel-cup wc4"><span>🥚</span><b>?</b></div>
-        <div class="wheel-cup wc5"><span>🥚</span><b>?</b></div>
-        <div class="wheel-cup wc6"><span>🥚</span><b>?</b></div>
-      </div><div class="wheel-progress" id="wheelProgress">第 1 / 4 次選蛋</div>
-    </div>
-    <div class="lottery-reel" id="lotteryReel" hidden aria-live="polite">
-      <div class="reel-head">✨ 幸運大抽獎 ✨</div>
-      <div class="reel-hint">LUCKY PRIZE DRAW</div>
-      <div class="reel-slots" id="reelSlots"><span>🎟 20</span><span>🎟 40</span><span>🎟 60</span><span>🎟 80</span></div>
-      <div class="reel-win" id="reelWin">🎉 中大獎！</div>
-    </div>
-    <div class="center-flash" id="centerFlash" aria-hidden="true"><div class="flash-egg">🥚</div><div class="flash-label"></div></div>
-    <div class="reward-stage" id="rewardStage" aria-live="polite" aria-atomic="true" hidden>
-      <div class="reward-aura"></div>
-      <div class="reward-hero" id="rewardHero">🥚</div>
-      <div class="reward-kicker" id="rewardKicker">LUCKY EGGS</div>
-      <div class="reward-title" id="rewardTitle">幸運大抽獎</div>
-      <div class="reward-value" id="rewardValue">+36</div>
-      <div class="reward-subtitle" id="rewardSubtitle">張獎券</div>
-      <div class="ticket-rain" id="ticketRain" aria-hidden="true"></div>
-    </div>
-    <div class="big-countdown" id="bigCountdown" aria-hidden="true" hidden>3</div>
-    <div class="stage-message" id="stageMessage" aria-live="polite">集滿 3 隻金雞，挑戰超級大獎！</div>
-    <div class="scene-bottom">
-      <div class="ticket-chip">🎟 <span id="ticketValue">0</span> <small>獎券</small></div>
-      <div class="gem-chip">💎 <span id="gemValue">0</span> <small>寶石</small></div>
-      <div class="hit-chip">🔥 <span id="comboValue">0</span> <small>連擊</small></div>
-    </div>
-    <div class="round-progress"><div id="roundProgress"></div></div>
-  </section>
-
-  <section class="egg-console" aria-label="六顆可敲擊金蛋">
-    <div class="console-outline" aria-hidden="true"></div>
-    <div class="console-sparkles" aria-hidden="true">✦ <span>✧</span> ✦</div>
-    <div class="egg-grid" id="eggGrid">
-      <button type="button" class="egg-button e1" data-index="0" aria-label="敲擊第一顆金蛋"><span class="ring"></span><span class="egg-shape"><i></i></span><span class="egg-number">1</span></button>
-      <button type="button" class="egg-button e2" data-index="1" aria-label="敲擊第二顆金蛋"><span class="ring"></span><span class="egg-shape"><i></i></span><span class="egg-number">2</span></button>
-      <button type="button" class="egg-button e3" data-index="2" aria-label="敲擊第三顆金蛋"><span class="ring"></span><span class="egg-shape"><i></i></span><span class="egg-number">3</span></button>
-      <button type="button" class="egg-button e4" data-index="3" aria-label="敲擊第四顆金蛋"><span class="ring"></span><span class="egg-shape"><i></i></span><span class="egg-number">4</span></button>
-      <button type="button" class="egg-button e5" data-index="4" aria-label="敲擊第五顆金蛋"><span class="ring"></span><span class="egg-shape"><i></i></span><span class="egg-number">5</span></button>
-      <button type="button" class="egg-button e6" data-index="5" aria-label="敲擊第六顆金蛋"><span class="ring"></span><span class="egg-shape"><i></i></span><span class="egg-number">6</span></button>
-    </div>
-    <div class="coin-basket" aria-hidden="true"><span class="basket-rim"></span><span class="basket-coins">🪙 🪙 🪙</span><span class="basket-label">LUCKY</span></div>
-    <div class="console-tip" id="consoleTip">螢幕亮哪顆蛋，就點下方對應位置</div>
-  </section>
-
-  <footer class="machine-footer">
-    <div class="credit-count">🪙 <strong id="creditValue">∞</strong><small>免費試玩</small></div>
-    <button class="start-button" id="startButton" type="button">▶ 開始遊戲</button>
-    <div class="best-count">最佳 <strong id="bestValue">0</strong></div>
-  </footer>
-
-  <div class="toast" id="toast" role="status" aria-live="polite"></div>
-  <canvas id="particleCanvas" aria-hidden="true"></canvas>
-  <div class="modal-layer" id="modalLayer">
-    <div class="modal-shade"></div>
-    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
-      <div class="modal-deco" id="modalDeco">✨ 🥚 ✨</div>
-      <h1 id="modalTitle">砸金蛋</h1>
-      <p class="modal-lead" id="modalLead">LUCKY EGGS · 街機手機版 V3</p>
-      <div class="modal-description" id="modalDescription">
-        看準亮起的金蛋，快速敲擊！<br>
-        街機模式：<b>看蛋 → 洗牌 → 選蛋 → 開獎</b>。<br>
-        加入 <b>獎券、寶石、幸運大抽獎</b> 等玩法。
-      </div>
-      <div class="mode-chooser" id="modeChooser" aria-label="選擇遊戲模式">
-        <button type="button" class="mode-choice selected" data-mode="arcade" aria-pressed="true"><b>🎡 街機選蛋</b><small>影片玩法 · 4 次選蛋</small></button>
-        <button type="button" class="mode-choice" data-mode="classic" aria-pressed="false"><b>經典挑戰</b><small>60秒 · 標準速度</small></button>
-        <button type="button" class="mode-choice" data-mode="rush" aria-pressed="false"><b>極速狂歡</b><small>45秒 · 加速出蛋</small></button>
-      </div>
-      <div class="modal-stats" id="modalStats" hidden></div>
-      <button class="modal-play" id="modalAction" type="button">🥚 開始砸金蛋</button>
-      <button class="modal-secondary" id="modalSecondary" type="button" hidden>返回主畫面</button>
-      <button class="modal-share" id="modalShare" type="button" hidden>↗ 分享本局成績</button>
-      <p class="modal-footnote" id="modalFootnote">遊戲內獎券、寶石及彩金僅為虛擬分數，無現金、實體獎品或兌換機制。</p>
-    </div>
-  </div>
+<body><main id="app" aria-label="鑽石球場手機棒球遊戲">
+<canvas id="field" aria-label="棒球場動態畫面"></canvas><div id="vignette"></div><div id="brand">RETRO DIAMOND • 2007</div>
+<div id="hud" class="hidden">
+ <div class="scoreboard"><div class="score-left">
+  <div class="teamrow"><span class="team-name"><i class="teammark"></i>海港飛鷹</span><b id="pScore">0</b></div>
+  <div class="teamrow"><span class="team-name"><i class="teammark orange"></i>都會猛虎</span><b id="cScore">0</b></div>
+ </div><div class="score-right"><div class="inning-box"><span class="little">局數</span><strong id="inning">1▲</strong><span class="little" id="inningsTotal">共 3 局</span></div><div class="basechart"><span id="b3" class="base b3"></span><span id="b2" class="base b2"></span><span id="b1" class="base b1"></span></div></div></div>
+ <div class="stats-row"><div class="pill" id="countStat">B 0　S 0　O 0</div><div class="pill" id="batStat">打擊中</div><button id="pauseBtn" aria-label="暫停遊戲">Ⅱ</button></div>
+</div>
+<div id="fieldTag">ARCADE / ORIGINAL BUILD</div>
+<div id="floatingHint" class="hidden"></div>
+<div id="message" class="hidden"><div class="msg-title" id="msgTitle"></div><div class="msg-sub" id="msgSub"></div></div>
+<section id="menu" class="screen">
+ <div class="overline">經典手機棒球致敬作品</div><div class="hero-ball">⚾</div><h1>鑽石球場 <span>’07</span></h1>
+ <p class="subline">從打擊區到投手丘，重溫 2007 年手機棒球的街機手感。支援觸控與鍵盤，離線也能玩。</p>
+ <div class="menu-panel">
+  <div class="setting-label">比賽局數</div><div class="seg" data-setting="innings"><button data-value="3" class="active">3 局</button><button data-value="6">6 局</button><button data-value="9">9 局</button></div>
+  <div class="setting-label">遊戲難度</div><div class="seg" data-setting="difficulty"><button data-value="0" class="active">新手</button><button data-value="1">標準</button><button data-value="2">高手</button></div>
+  <div class="setting-label">球場時間</div><div class="seg" data-setting="light"><button data-value="day" class="active">日間</button><button data-value="night">夜間</button></div>
+  <button class="menu-start" id="startMatch">⚾　開始快速對戰</button><button class="menu-start secondary" id="startDerby">★　全壘打挑戰（10 球）</button>
+  <div class="menu-tip">單機對戰 · 完整攻守換局 · 原創畫面與球隊<br>電腦版：空白鍵揮棒／投球，方向鍵調整打擊方向</div>
+ </div>
+</section>
+<section id="controlsBat" class="controls hidden">
+ <div class="controls-heading"><strong id="batHeading">看球出手！</strong><span id="pitchLabel">等待投手投球</span></div>
+ <div class="timing"><div class="sweet"></div><div id="timingFill"></div></div>
+ <div class="control-row"><div class="direction"><button class="mini-button" data-dir="-1">← 拉打</button><button class="mini-button active" data-dir="0">中間</button><button class="mini-button" data-dir="1">反向 →</button></div><button class="action" id="swingBtn">揮棒！</button></div>
+</section>
+<section id="controlsPitch" class="controls hidden">
+ <div class="controls-heading"><strong>選球種、瞄準九宮格，再抓準指針投球</strong></div>
+ <div class="pitch-layout"><div class="pitch-zone" id="pitchZone" aria-label="投球落點九宮格"></div><div><div class="setting-label">球種選擇</div><div class="pitch-options"><button class="mini-button active" data-pitch="fast">快速球</button><button class="mini-button" data-pitch="curve">曲球</button><button class="mini-button" data-pitch="change">變速球</button></div><div class="setting-label" style="margin-top:9px">準度（綠色最準）</div><div class="pitch-meter" id="pitchMeter"></div></div></div>
+ <div class="pitchbottom"><small id="pitchInfo">角落球較難擊中；準度差可能形成壞球。</small><button class="action blue" id="throwBtn">投球！</button></div>
+</section>
+<div id="catchControls" class="hidden"><div class="catchhint">看到落球時機，按接球防守！</div><button class="catchbutton" id="catchBtn">✦ 接球！</button></div>
+<section id="overlay" class="screen hidden"><div class="overlay-card"><div class="overline" id="ovEyebrow">攻守交換</div><h2 id="ovTitle">下半局</h2><p id="ovDesc"></p><div class="score-final" id="ovScore"></div><p class="extra" id="ovExtra"></p><div class="overlay-actions"><button id="ovPrimary">繼續比賽</button><button class="alt" id="ovSecondary">回到主選單</button></div></div></section>
+<div id="footInfo">單機版 · 音效首次互動後啟用 · 非原廠授權作品</div>
 </main>
-</body>
-</html>
+<script>
+(()=>{'use strict';
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const el={app:$('#app'),canvas:$('#field'),ctx:$('#field').getContext('2d'),menu:$('#menu'),hud:$('#hud'),bat:$('#controlsBat'),pitch:$('#controlsPitch'),catch:$('#catchControls'),overlay:$('#overlay'),message:$('#message'),hint:$('#floatingHint')};
+const cfg={innings:3,difficulty:0,light:'day'};
+let g={screen:'menu',stage:'idle',mode:'match',paused:false,clock:0,st:0,playerScore:0,cpuScore:0,inning:1,half:'top',outs:0,strikes:0,balls:0,bases:[false,false,false],direction:0,pitchType:'fast',target:4,pitchObj:null,flight:null,derbyPitches:0,derbyHR:0,derbyBest:0,phaseCallback:null,notice:null,last:0,swingTime:0,swung:false,tryCatch:false};
+let vw=400,vh=800,ratio=1,audio=null,audioOn=true;
+function saveBest(){try{localStorage.setItem('rd07best',String(g.derbyBest))}catch(e){}}
+function loadBest(){try{return Number(localStorage.getItem('rd07best')||0)}catch(e){return 0}}
+function rand(a,b){return a+Math.random()*(b-a)}
+function clamp(x,a,b){return Math.max(a,Math.min(b,x))}
+function show(id,on){$(id).classList.toggle('hidden',!on)}
+function sfx(kind){if(!audioOn)return;try{if(!audio)audio=new (window.AudioContext||window.webkitAudioContext)();if(audio.state==='suspended')audio.resume();const t=audio.currentTime;const notes=kind==='hit'?[260,420,680]:kind==='homer'?[392,523,659,784]:kind==='bad'?[240,180]:kind==='pitch'?[420,200]:kind==='good'?[550,620]:[360];notes.forEach((hz,i)=>{const o=audio.createOscillator(),v=audio.createGain();o.type=kind==='hit'?'triangle':'sine';o.frequency.setValueAtTime(hz,t+i*.085);v.gain.setValueAtTime(.0001,t+i*.085);v.gain.exponentialRampToValueAtTime(.055,t+i*.085+.012);v.gain.exponentialRampToValueAtTime(.0001,t+i*.085+.13);o.connect(v);v.connect(audio.destination);o.start(t+i*.085);o.stop(t+i*.085+.15)})}catch(e){}}
+function resize(){const box=el.app.getBoundingClientRect();vw=box.width;vh=box.height;ratio=Math.min(devicePixelRatio||1,2);el.canvas.width=Math.round(vw*ratio);el.canvas.height=Math.round(vh*ratio);el.ctx.setTransform(ratio,0,0,ratio,0,0)}
+window.addEventListener('resize',resize);resize();
+function setScreen(s){g.screen=s;show('#menu',s==='menu');show('#hud',s!=='menu'&&s!=='overlay' ? true : s==='overlay'&&g.mode==='match');show('#controlsBat',s==='bat');show('#controlsPitch',s==='pitch');show('#catchControls',s==='flight'&&g.flight?.owner==='cpu'&&g.flight?.catchable);show('#overlay',s==='overlay');show('#brand',s==='menu');show('#fieldTag',s!=='menu');show('#footInfo',s==='menu');updateHud();}
+function setupGame(mode){const best=loadBest();g={...g,screen:'bat',stage:'ready',mode,paused:false,clock:0,st:0,playerScore:0,cpuScore:0,inning:1,half:'top',outs:0,strikes:0,balls:0,bases:[false,false,false],direction:0,pitchType:'fast',target:4,pitchObj:null,flight:null,derbyPitches:0,derbyHR:0,derbyBest:best,phaseCallback:null,notice:null,swung:false,tryCatch:false};show('#message',false);show('#floatingHint',false);setDirection(0);setPitchType('fast');setTarget(4);setScreen('bat');updateHud();startCpuPitch();}
+function updateHud(){if(g.mode==='derby'){ $('#pScore').textContent=String(g.derbyHR);$('#cScore').textContent=String(Math.max(0,10-g.derbyPitches));$('#inning').textContent='HR';$('#inningsTotal').textContent='10 球挑戰';$('#countStat').textContent=`投球 ${g.derbyPitches}/10`;$('#batStat').textContent=`最佳 ${g.derbyBest} 發`;$('.teamrow .team-name').textContent='⚾ 全壘打數';$$('.teamrow')[1].querySelector('.team-name').textContent='　剩餘球數';}else{ $('#pScore').textContent=g.playerScore;$('#cScore').textContent=g.cpuScore;$('#inning').textContent=g.inning+(g.half==='top'?'▲':'▼');$('#inningsTotal').textContent=`共 ${cfg.innings} 局`;$('#countStat').textContent=`B ${g.balls}　S ${g.strikes}　O ${g.outs}`;$('#batStat').textContent=g.half==='top'?'我方打擊':'我方投球';$$('.teamrow')[0].querySelector('.team-name').innerHTML='<i class="teammark"></i>海港飛鷹';$$('.teamrow')[1].querySelector('.team-name').innerHTML='<i class="teammark orange"></i>都會猛虎';}for(let i=1;i<=3;i++)$('#b'+i).classList.toggle('lit',g.bases[i-1]);}
+function setDirection(d){g.direction=d;$$('[data-dir]').forEach(b=>b.classList.toggle('active',Number(b.dataset.dir)===d));}
+function setPitchType(p){g.pitchType=p;$$('[data-pitch]').forEach(b=>b.classList.toggle('active',b.dataset.pitch===p));}
+function setTarget(n){g.target=n;$$('.zonecell').forEach(b=>b.classList.toggle('active',Number(b.dataset.target)===n));}
+function setHint(s,visible=true){el.hint.textContent=s;el.hint.classList.toggle('hidden',!visible)}
+function announce(title,detail){$('#msgTitle').textContent=title;$('#msgSub').textContent=detail||'';show('#message',true);}
+function hideAnnouncement(){show('#message',false)}
+function enterResult(title,desc,fn,delay=1.22){g.stage='result';g.st=0;g.phaseCallback=fn;g.resultDuration=delay;announce(title,desc);updateHud();}
+function continueAfterResult(){hideAnnouncement();const fn=g.phaseCallback;g.phaseCallback=null;if(fn)fn();}
+function resetCount(){g.strikes=0;g.balls=0;updateHud();}
+function atBatDone(out=false){resetCount();if(out){g.outs++;sfx('bad')}updateHud();if(g.outs>=3){advanceHalf();return true}return false}
+function afterPlay(){if(g.mode==='derby'){if(g.derbyPitches>=10){finishGame();return}setScreen('bat');startCpuPitch();return;}if(g.outs>=3)return;if(g.half==='top'){setScreen('bat');startCpuPitch()}else{setScreen('pitch');g.stage='aim';g.st=0;setHint('選擇球種、目標後點「投球」');}}
+function advanceHalf(){g.stage='idle';if(g.half==='top'){g.half='bottom'}else{if(g.inning>=cfg.innings&&g.playerScore!==g.cpuScore){finishGame();return}if(g.inning>=cfg.innings+2){finishGame();return}g.inning++;g.half='top'}g.outs=0;g.balls=0;g.strikes=0;g.bases=[false,false,false];updateHud();const offense=g.half==='top'?'我方上場打擊':'輪到我方投球';openOverlay('攻守交換',g.inning+(g.half==='top'?' 局上半':' 局下半'),offense+'。三人出局後就會換邊。',`${g.playerScore}　:　${g.cpuScore}`,'依照球數與攻守策略，爭取勝利！','繼續比賽',()=>{if(g.half==='top'){setScreen('bat');startCpuPitch()}else{setScreen('pitch');g.stage='aim';setHint('選擇球種、目標後點「投球」');}},true);}
+function finishGame(){g.stage='idle';if(g.mode==='derby'){g.derbyBest=Math.max(g.derbyBest,g.derbyHR);saveBest();openOverlay('全壘打挑戰',g.derbyHR>=5?'重砲轟炸！':'本次挑戰完成',`10 次投球共擊出 ${g.derbyHR} 支全壘打。`,`⚾ ${g.derbyHR} HR`,`個人最佳：${g.derbyBest} 支`,'再挑戰一次',()=>setupGame('derby'),false);}else{let won=g.playerScore>g.cpuScore,draw=g.playerScore===g.cpuScore;openOverlay('比賽結束',draw?'平手！':won?'勝利！':'再接再厲',won?'海港飛鷹贏得本場對決！':draw?'雙方鏖戰難分高下。':'都會猛虎守住勝利。',`${g.playerScore}　:　${g.cpuScore}`,`${g.inning} 局比賽結束　·　海港飛鷹 vs 都會猛虎`,'重新比賽',()=>setupGame('match'),false);}sfx('homer')}
+function openOverlay(eyebrow,title,desc,score,extra,button,primary,allowResume){g.paused=false;$('#ovEyebrow').textContent=eyebrow;$('#ovTitle').textContent=title;$('#ovDesc').textContent=desc;$('#ovScore').textContent=score;$('#ovExtra').textContent=extra;$('#ovPrimary').textContent=button;$('#ovPrimary').onclick=primary;$('#ovSecondary').textContent='返回主選單';$('#ovSecondary').onclick=()=>returnMenu();setScreen('overlay');g.overlayIsPause=false;}
+function returnMenu(){g.stage='idle';g.paused=false;hideAnnouncement();setHint('',false);setScreen('menu')}
+function togglePause(){if(g.screen==='menu'||g.screen==='overlay')return;let oldScreen=g.screen;g.paused=true;openOverlay('暫停中','中場休息',`目前 ${g.inning} 局${g.half==='top'?'上':'下'}半，${g.outs} 人出局。`,`${g.playerScore}　:　${g.cpuScore}`,'手機可直接點選操作，電腦按空白鍵。','繼續比賽',()=>{setScreen(oldScreen);g.paused=false;},true);g.paused=true;g.overlayIsPause=true;}
+function startCpuPitch(){g.stage='windup';g.st=0;g.swung=false;g.pitchObj={duration:rand(1.07,1.25)+(cfg.difficulty===0?.18:cfg.difficulty===2?-.10:0),kind:['快速球','曲球','變速球'][Math.floor(Math.random()*3)],endX:rand(-.8,.8),endY:rand(-.4,.4),strike:Math.random()<(.76-cfg.difficulty*.04)};if(!g.pitchObj.strike)g.pitchObj.endX=(Math.random()<.5?-1:1)*rand(1.15,1.65);$('#pitchLabel').textContent='投手準備中…';$('#batHeading').textContent=g.mode==='derby'?`全壘打挑戰 ${g.derbyPitches+1}/10`:'看球出手！';$('#timingFill').style.width='0%';setHint('',false);}
+function finishMissedPitch(swung,reason){if(g.mode==='derby'){g.derbyPitches++;sfx('bad');enterResult('沒有擊中',`${g.derbyPitches}/10 球 · ${reason}`,afterPlay,1);return}if(swung||g.pitchObj.strike){g.strikes++;if(g.strikes>=3){enterResult('三振出局！','揮棒落空 / 第三好球',()=>{if(!atBatDone(true))afterPlay()});}else enterResult('好球！',`好球 ${g.strikes} · 壞球 ${g.balls}`,afterPlay,.95);sfx('bad')}else{g.balls++;if(g.balls>=4){advanceRunners(1,true,'player');enterResult('四壞保送','打者安全上壘',()=>{resetCount();afterPlay()});}else enterResult('壞球！',`壞球 ${g.balls} · 好球 ${g.strikes}`,afterPlay,.95);}updateHud();}
+function foulBall(){if(g.mode==='derby'){g.derbyPitches++;enterResult('界外球！',`${g.derbyPitches}/10 球`,afterPlay,1);return}g.strikes=Math.min(2,g.strikes+1);enterResult('界外球！',`好球 ${g.strikes} · 壞球 ${g.balls}`,afterPlay,1);sfx('pitch');updateHud();}
+function swing(){if(g.screen!=='bat'||g.stage!=='travel'||g.swung||g.paused)return;g.swung=true;const p=clamp(g.st/g.pitchObj.duration,0,2);g.swingTime=.25;const sweet=cfg.difficulty===0?.27:cfg.difficulty===1?.21:.17;const delta=Math.abs(p-.88);if(delta>sweet*1.8){finishMissedPitch(true,p<.88?'太早揮棒':'揮棒太晚');return}if(delta>sweet*1.10){foulBall();return}const accuracy=clamp(1-delta/sweet,0,1);const r=Math.random();let outcome;if(accuracy>.72&&r<(.19+accuracy*.20)){outcome='homer'}else if(accuracy>.40&&r<(.38+accuracy*.18)){outcome='double'}else if(accuracy>.73&&r<.07){outcome='triple'}else if(r<(.19+cfg.difficulty*.065)){outcome='flyout'}else if(r<(.3+cfg.difficulty*.10)){outcome='groundout'}else{outcome='single'};if(g.pitchObj.endX>1.1&&Math.random()<.3)outcome='foul';if(outcome==='foul'){foulBall();return}createFlight(outcome,'player',accuracy);sfx(outcome==='homer'?'homer':'hit');}
+function throwPitch(){if(g.screen!=='pitch'||g.stage!=='aim'||g.paused)return;let meter=.5+.48*Math.sin(g.clock*5.7);let acc=1-Math.abs(meter-.5)*2;g.pitchObj={duration:.93,kind:g.pitchType,accuracy:acc,target:g.target,meter,hit:null};g.stage='delivery';g.st=0;setHint(`投球中 · 準度 ${Math.round(acc*100)}%`);sfx('pitch')}
+function resolveCpuBatter(){let p=g.pitchObj;let corner=[0,2,6,8].includes(p.target);let edge=[0,1,2,3,5,6,7,8].includes(p.target);let risky=(1-p.accuracy)*.55;let strike=Math.random()<(.93-risky-(corner?.08:0));let swingOdds=strike?.83:.21;let cpuSwing=Math.random()<swingOdds;if(!cpuSwing){if(strike){g.strikes++;if(g.strikes>=3){enterResult('見逃三振！','第三好球！',()=>{if(!atBatDone(true))afterPlay()});}else enterResult('好球！',`好球 ${g.strikes}`,afterPlay,.95);}else{g.balls++;if(g.balls>=4){advanceRunners(1,true,'cpu');const walkoff=g.mode==='match'&&g.inning>=cfg.innings&&g.half==='bottom'&&g.cpuScore>g.playerScore;enterResult('四壞保送',walkoff?'再見保送！對手取得致勝分':'對手獲得一壘',()=>{resetCount();if(walkoff)finishGame();else afterPlay()});}else enterResult('壞球！',`壞球 ${g.balls}`,afterPlay,.95);}updateHud();return;}
+let hitChance=clamp(.75 - p.accuracy*.23 - (edge?.07:0) -(p.kind==='curve'?.085:0)-(p.kind==='change'?.06:0)+cfg.difficulty*.075,.23,.83);if(Math.random()>hitChance){g.strikes++;if(g.strikes>=3){enterResult('揮空三振！','這球漂亮地騙過打者',()=>{if(!atBatDone(true))afterPlay()});}else enterResult('揮棒落空！',`好球 ${g.strikes}`,afterPlay,.97);sfx('good');updateHud();return}if(Math.random()<.15){foulCpu();return}let r=Math.random();let outcome=r<.16?'groundout':r<.29?'flyout':r<.77?'single':r<.95?'double':'homer';createFlight(outcome,'cpu',rand(.42,.9));sfx(outcome==='homer'?'homer':'hit');}
+function foulCpu(){g.strikes=Math.min(2,g.strikes+1);enterResult('界外球！',`好球 ${g.strikes} · 壞球 ${g.balls}`,afterPlay,.95);updateHud();}
+function createFlight(outcome,owner,power){g.flight={outcome,owner,power,t:0,dir:owner==='player'?g.direction:Math.round(rand(-1,1)),catchable:owner==='cpu'&&['single','double','flyout'].includes(outcome),caught:false,catchAttempted:false,catchSuccess:false};g.stage='flight';g.st=0;setScreen('flight');setHint(owner==='cpu'&&g.flight.catchable?'守備時間！球落地前抓準時機':'球擊出去了！',true);}
+function fieldCatch(){if(g.screen!=='flight'||g.paused||!g.flight?.catchable||g.flight.catchAttempted)return;g.flight.catchAttempted=true;const t=g.st/1.60;g.flight.catchSuccess=t>.57&&t<.90;if(g.flight.catchSuccess){g.flight.caught=true;announce('精彩接殺！','成功抓到接球時機');sfx('good')}else{announce('接球時機不對','必須在球快落下時出手！');sfx('bad')}show('#catchControls',false);}
+function advanceRunners(n,force,owner){const isPlayer=owner==='player';let score=0;const nb=[false,false,false];if(force){for(let i=2;i>=0;i--){if(g.bases[i]){if(i===2&&g.bases[0]&&g.bases[1])score++;else if(i===1&&g.bases[0])nb[2]=true;else if(i===0)nb[1]=true;else nb[i]=true;}}nb[0]=true;}else{for(let i=2;i>=0;i--){if(g.bases[i]){let dest=i+n;if(dest>=3)score++;else nb[dest]=true;}}if(n>=4)score++;else nb[n-1]=true;}g.bases=nb;if(isPlayer)g.playerScore+=score;else g.cpuScore+=score;updateHud();return score;}
+function resolveFlight(){setHint('',false);show('#catchControls',false);let f=g.flight;if(!f)return;let outcome=f.caught?'flyout':f.outcome;if(f.owner==='cpu'&&f.catchable&&!f.caught&&f.outcome==='flyout')outcome='single';g.flight=null;let headline='',detail='';if(outcome==='flyout'||outcome==='groundout'){g.outs++;headline=outcome==='flyout'?'高飛球出局！':'滾地球出局！';detail='守備員完成封殺';sfx('bad');resetCount();}else{let amount={single:1,double:2,triple:3,homer:4}[outcome];let scored=advanceRunners(amount,false,f.owner);headline={single:'安打！',double:'二壘安打！',triple:'三壘安打！',homer:'全壘打！'}[outcome];detail=scored?`這一棒帶回 ${scored} 分！`:'打者安全上壘';if(g.mode==='derby'){g.derbyPitches++;if(outcome==='homer'){g.derbyHR++;detail=`第 ${g.derbyPitches} 球 · 本輪 ${g.derbyHR} 支全壘打`}else detail=`第 ${g.derbyPitches} 球 · 非全壘打`;g.bases=[false,false,false];}resetCount();}if(g.mode==='derby'&&(outcome==='flyout'||outcome==='groundout'))g.derbyPitches++;updateHud();if(g.mode==='match'&&f.owner==='cpu'&&g.inning>=cfg.innings&&g.half==='bottom'&&g.cpuScore>g.playerScore){enterResult('再見安打！','對手在最後半局取得領先',finishGame,1.5);return}enterResult(headline,detail,()=>{if(g.mode==='match'&&g.outs>=3){advanceHalf()}else afterPlay()},1.37);}
+function meterPosition(){return .5+.48*Math.sin(g.clock*5.7)}
+function update(dt){if(g.screen==='menu'||g.screen==='overlay'||g.paused)return;g.clock+=dt;g.st+=dt;if(g.screen==='bat'){
+ if(g.stage==='windup'&&g.st>.72){g.stage='travel';g.st=0;$('#pitchLabel').textContent=g.pitchObj.kind+' · 注意落點';sfx('pitch')}
+ else if(g.stage==='travel'){let p=g.st/g.pitchObj.duration;$('#timingFill').style.width=clamp(p*100,0,100)+'%';$('#pitchLabel').textContent=p>.70&&p<1.05?'◆ 現在可以揮棒！':p<.70?'球正在靠近…':'快要進壘！';if(p>1.14&&!g.swung)finishMissedPitch(false,'目送進壘');}
+ }else if(g.screen==='pitch'){$('#pitchMeter').style.setProperty('--meter-pos',(meterPosition()*100)+'%');if(g.stage==='delivery'&&g.st>.93)resolveCpuBatter()}
+ else if(g.screen==='flight'){if(g.st>1.60)resolveFlight()}
+ if(g.stage==='result'&&g.st>g.resultDuration)continueAfterResult();if(g.swingTime>0)g.swingTime=Math.max(0,g.swingTime-dt);
+}
+function drawSky(ctx,w,h){let night=cfg.light==='night';let grad=ctx.createLinearGradient(0,0,0,h*.54);if(night){grad.addColorStop(0,'#07132d');grad.addColorStop(.60,'#193d67');grad.addColorStop(1,'#ad727a')}else{grad.addColorStop(0,'#1274a9');grad.addColorStop(.62,'#76bed5');grad.addColorStop(1,'#f6c580')}ctx.fillStyle=grad;ctx.fillRect(0,0,w,h);if(night){ctx.fillStyle='#fff9dc';for(let i=0;i<43;i++){const x=((i*71+23)%419)/419*w,y=((i*113+29)%223)/600*h;ctx.globalAlpha=.4+(i%4)*.15;ctx.fillRect(x,y,1.5,1.5)}ctx.globalAlpha=1;}const skylineY=h*.357;for(let i=0;i<23;i++){const x=i/22*w-5,bh=((i*37+17)%47+13)/100*h*.24;ctx.fillStyle=night?'#12324e':'#668c9c';ctx.fillRect(x,skylineY-bh,w*.058,bh);ctx.fillStyle=night?'#ddc16e88':'#d6dcd29e';for(let z=0;z<4;z++)if((z+i)%3!==0)ctx.fillRect(x+3,skylineY-bh+6+z*9,2,3)} }
+function drawLights(ctx,w,h){let night=cfg.light==='night';for(const side of [-1,1]){const x=side===-1?w*.07:w*.93,y=h*.215;ctx.strokeStyle='#233746';ctx.lineWidth=4;ctx.beginPath();ctx.moveTo(x,h*.46);ctx.lineTo(x,y);ctx.stroke();ctx.fillStyle='#18334b';ctx.fillRect(x-w*.056,y-h*.035,w*.112,h*.046);for(let i=0;i<4;i++)for(let j=0;j<2;j++){ctx.fillStyle=night?'#fffbd5':'#e8fdff';ctx.shadowColor=night?'#fff8c6':'#faffff';ctx.shadowBlur=night?18:5;ctx.fillRect(x-w*.046+i*w*.025,y-h*.027+j*h*.018,w*.018,h*.012)}ctx.shadowBlur=0;}}
+function drawCrowd(ctx,w,h){ctx.fillStyle='#2a5362';ctx.beginPath();ctx.moveTo(0,h*.378);ctx.lineTo(w,h*.378);ctx.lineTo(w,h*.493);ctx.quadraticCurveTo(w*.5,h*.462,0,h*.493);ctx.closePath();ctx.fill();ctx.fillStyle='#112b35';ctx.fillRect(0,h*.426,w,h*.05);for(let i=0;i<420;i++){const xx=((i*83+13)%463)/463*w,yy=(.39+((i*53+29)%73)/1000)*h;let colors=['#f6dbb4','#e89782','#6ab6ce','#d5eea0','#e3e4ff'];ctx.fillStyle=colors[i%5];ctx.globalAlpha=.55;ctx.fillRect(xx,yy,1.9,2.3)}ctx.globalAlpha=1;ctx.fillStyle='#0f3a4b';ctx.fillRect(0,h*.47,w,h*.017);ctx.fillStyle='#fff7d6';ctx.font=`bold ${Math.max(9,w*.021)}px system-ui`;ctx.textAlign='center';ctx.fillText('RETRO DIAMOND • HOME OF THE GAME',w*.50,h*.478);}
+function polygon(ctx,pts,fill,stroke,lineWidth=1){ctx.beginPath();ctx.moveTo(pts[0][0],pts[0][1]);pts.slice(1).forEach(p=>ctx.lineTo(p[0],p[1]));ctx.closePath();if(fill){ctx.fillStyle=fill;ctx.fill()}if(stroke){ctx.strokeStyle=stroke;ctx.lineWidth=lineWidth;ctx.stroke()}}
+function drawBatField(ctx,w,h){drawSky(ctx,w,h);drawLights(ctx,w,h);drawCrowd(ctx,w,h);const cy=h*.478;ctx.fillStyle='#1d7e54';ctx.fillRect(0,cy,w,h-cy);for(let i=0;i<9;i++){let y=cy+(h-cy)*Math.pow(i/9,1.7);ctx.fillStyle=i%2?'#228d57':'#278e61';ctx.fillRect(0,y,w,(h-cy)/9+2);}polygon(ctx,[[w*.48,cy],[w*.52,cy],[w*1.04,h],[w*-.04,h]],'#a46d4d');polygon(ctx,[[w*.49,cy],[w*.51,cy],[w*.75,h*.75],[w*.25,h*.75]],'#3c925f');ctx.strokeStyle='#f4e6c9';ctx.lineWidth=2.3;ctx.beginPath();ctx.moveTo(w*.5,h*.62);ctx.lineTo(w*.02,h);ctx.moveTo(w*.5,h*.62);ctx.lineTo(w*.98,h);ctx.stroke();ctx.fillStyle='#9d6645';ctx.beginPath();ctx.ellipse(w*.5,h*.61,w*.1,h*.028,0,0,Math.PI*2);ctx.fill();ctx.fillStyle='#fff7df';ctx.fillRect(w*.49,h*.60,w*.02,h*.004);ctx.fillStyle='#b17a55';ctx.beginPath();ctx.ellipse(w*.5,h*.83,w*.45,h*.18,0,0,Math.PI*2);ctx.fill();ctx.fillStyle='#f7f0da';polygon(ctx,[[w*.47,h*.817],[w*.53,h*.817],[w*.532,h*.836],[w*.50,h*.85],[w*.468,h*.836]],'#f5e6cf');
+ // Strike-zone target floating above plate
+ const sw=w*.16,sh=h*.116,sx=w*.5-sw/2,sy=h*.692;ctx.strokeStyle='#e5fbff73';ctx.lineWidth=1;ctx.setLineDash([4,5]);ctx.strokeRect(sx,sy,sw,sh);ctx.setLineDash([]);
+ // Players in scene
+ drawPerson(ctx,w*.5,h*.591,w*.056,'#f5efe8','#10283f',false,Math.sin(g.clock*3)*.13);
+ drawPerson(ctx,w*.665,h*.828,w*.096,'#e5f0f9','#122f51',true,g.swingTime>0?.86:0);
+ drawPerson(ctx,w*.40,h*.832,w*.089,'#ce7f70','#263b59',false,.12);
+ // Pitch ball projected toward viewer
+ if(g.screen==='bat'&&g.stage==='travel'){let p=clamp(g.st/g.pitchObj.duration,0,1.14);let ey=h*(.608+p*.205),ex=w*.5+(g.pitchObj.endX*(p*p)*w*.12);let r=w*(.009+.022*Math.pow(p,2));ctx.save();ctx.shadowBlur=12+15*p;ctx.shadowColor='#ffffffa5';ctx.fillStyle='#fff5e0';ctx.beginPath();ctx.arc(ex,ey,r,0,Math.PI*2);ctx.fill();ctx.strokeStyle='#be6155';ctx.lineWidth=Math.max(1,r*.12);ctx.beginPath();ctx.arc(ex-r*.12,ey,r*.68,-1.3,1.3);ctx.stroke();ctx.restore();}
+ if(g.screen==='bat'&&g.stage==='windup'){ctx.fillStyle='#f4f8ff7f';ctx.textAlign='center';ctx.font=`bold ${Math.max(12,w*.03)}px system-ui`;ctx.fillText('投手準備投球...',w*.5,h*.53)}
+}
+function drawPerson(ctx,x,y,scale,shirt,pants,batter,anim=0){ctx.save();ctx.translate(x,y);let k=scale/22;ctx.scale(k,k);ctx.fillStyle='#07152677';ctx.beginPath();ctx.ellipse(0,0,23,7,0,0,7);ctx.fill();ctx.lineCap='round';ctx.strokeStyle=pants;ctx.lineWidth=8;ctx.beginPath();ctx.moveTo(-6,-15);ctx.lineTo(-9,0);ctx.moveTo(5,-15);ctx.lineTo(10,0);ctx.stroke();ctx.fillStyle=shirt;polygon(ctx,[[-12,-42],[13,-42],[11,-15],[-10,-15]],shirt);ctx.strokeStyle=shirt;ctx.lineWidth=8;ctx.beginPath();ctx.moveTo(-11,-36);ctx.lineTo(-18,-22);ctx.moveTo(11,-36);ctx.lineTo(17,-24);ctx.stroke();ctx.fillStyle='#e1aa7c';ctx.beginPath();ctx.arc(0,-51,9,0,Math.PI*2);ctx.fill();ctx.fillStyle=pants;ctx.fillRect(-11,-61,22,6);ctx.beginPath();ctx.ellipse(0,-57,14,3,0,0,7);ctx.fill();if(batter){ctx.save();ctx.translate(18,-32);ctx.rotate(-.38-anim*1.9);ctx.strokeStyle='#d9ac70';ctx.lineWidth=5;ctx.beginPath();ctx.moveTo(0,10);ctx.lineTo(31,-70);ctx.stroke();ctx.restore();}else{ctx.fillStyle='#754631';ctx.beginPath();ctx.arc(-18,-22,7,0,Math.PI*2);ctx.fill();}ctx.restore();}
+function drawPitchField(ctx,w,h){drawSky(ctx,w,h);drawLights(ctx,w,h);drawCrowd(ctx,w,h);ctx.fillStyle='#227d4c';ctx.fillRect(0,h*.47,w,h*.53);for(let i=0;i<9;i++){let y=h*(.47+.53*i/9);ctx.fillStyle=i%2?'#2c9b5a':'#218652';ctx.fillRect(0,y,w,h*.063)}polygon(ctx,[[w*.45,h*.51],[w*.55,h*.51],[w*.92,h],[w*.08,h]],'#b47850');polygon(ctx,[[w*.47,h*.52],[w*.53,h*.52],[w*.67,h*.75],[w*.33,h*.75]],'#2f9c5f');ctx.strokeStyle='#fff4d7';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(w*.5,h*.55);ctx.lineTo(0,h*.94);ctx.moveTo(w*.5,h*.55);ctx.lineTo(w,h*.94);ctx.stroke();ctx.fillStyle='#f5e5ce';polygon(ctx,[[w*.49,h*.55],[w*.51,h*.55],[w*.5,h*.566]],'#f7e9d5');drawPerson(ctx,w*.50,h*.60,w*.075,'#f3f2e7','#194b75',true,.30);drawPerson(ctx,w*.51,h*.85,w*.19,'#e7f3ff','#1b4165',false,Math.sin(g.clock*5)*.3);
+ const zx=w*.50,zy=h*.52,zw=w*.24,zh=h*.165;ctx.strokeStyle='#ecfaff9f';ctx.lineWidth=1.7;ctx.strokeRect(zx-zw/2,zy-zh*.65,zw,zh);ctx.strokeStyle='#edfcff5c';ctx.beginPath();for(let z=1;z<3;z++){ctx.moveTo(zx-zw/2+z*zw/3,zy-zh*.65);ctx.lineTo(zx-zw/2+z*zw/3,zy+zh*.35);ctx.moveTo(zx-zw/2,zy-zh*.65+z*zh/3);ctx.lineTo(zx+zw/2,zy-zh*.65+z*zh/3)}ctx.stroke();if(g.screen==='pitch'&&g.stage==='delivery'){let t=clamp(g.st/.93,0,1);let bx=w*.5+(g.target%3-1)*w*.036*t,by=h*(.81-t*.30);ctx.fillStyle='#fff7e9';ctx.shadowColor='white';ctx.shadowBlur=12;ctx.beginPath();ctx.arc(bx,by,w*(.022-.014*t),0,7);ctx.fill();ctx.shadowBlur=0;}}
+function drawFlightField(ctx,w,h){drawSky(ctx,w,h);drawLights(ctx,w,h);drawCrowd(ctx,w,h);ctx.fillStyle='#197044';ctx.fillRect(0,h*.47,w,h*.53);let cx=w*.5,homeY=h*.83,farY=h*.17;ctx.fillStyle='#227c47';ctx.beginPath();ctx.moveTo(cx,homeY);ctx.lineTo(-w*.32,h*.20);ctx.quadraticCurveTo(cx,farY-h*.22,w*1.32,h*.20);ctx.closePath();ctx.fill();ctx.fillStyle='#1b854f';for(let i=0;i<6;i++){ctx.beginPath();ctx.moveTo(cx,homeY);ctx.arc(cx,homeY,h*(.2+i*.065),-Math.PI*.78,-Math.PI*.22,false);ctx.closePath();if(i%2===0)ctx.fill()};const first=[w*.73,h*.64],second=[cx,h*.47],third=[w*.27,h*.64],home=[cx,homeY];polygon(ctx,[home,first,second,third],'#a56e4b','#f6e8c8',2);polygon(ctx,[[cx,h*.79],[w*.69,h*.64],[cx,h*.51],[w*.31,h*.64]],'#257d4a');for(let base of [home,first,second,third]){ctx.fillStyle='#f4e6d0';ctx.fillRect(base[0]-3,base[1]-3,6,6)}for(let [fx,fy] of [[.27,.36],[.5,.29],[.73,.36],[.5,.56],[.38,.62],[.62,.62],[.5,.77]]){drawPerson(ctx,w*fx,h*fy,w*.047,'#efe8de','#234560',false,0)}let t=clamp(g.st/1.60,0,1);const f=g.flight;if(f){let landX=w*(.50+f.dir*(f.outcome==='homer'?.38:.25)),landY=h*(f.outcome==='homer'?.16:f.outcome==='double'?.25:.43);let x=cx+(landX-cx)*t,y=homeY+(landY-homeY)*t;const loft=h*.22*Math.sin(Math.PI*t);ctx.fillStyle='#001b197a';ctx.beginPath();ctx.ellipse(x,y,8+12*t,4+5*t,0,0,7);ctx.fill();ctx.fillStyle='#fff';ctx.shadowBlur=15;ctx.shadowColor='#fff8bd';ctx.beginPath();ctx.arc(x,y-loft,5+2*t,0,7);ctx.fill();ctx.shadowBlur=0;ctx.strokeStyle='#ffffff78';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(x-7,y-loft+6);ctx.lineTo(x-18,y-loft+18);ctx.stroke();if(f.catchable){ctx.strokeStyle=f.catchSuccess?'#46e8ad':'#ffda74';ctx.lineWidth=3;ctx.beginPath();ctx.arc(landX,landY,13+Math.sin(g.clock*7)*3,0,7);ctx.stroke();}}}
+function drawFrame(){const ctx=el.ctx,w=vw,h=vh;ctx.clearRect(0,0,w,h);if(g.screen==='flight')drawFlightField(ctx,w,h);else if(g.screen==='pitch'||(g.screen==='overlay'&&g.half==='bottom'))drawPitchField(ctx,w,h);else drawBatField(ctx,w,h);let grad=ctx.createLinearGradient(0,0,w,0);grad.addColorStop(0,'#000e18b2');grad.addColorStop(.12,'#00000000');grad.addColorStop(.88,'#00000000');grad.addColorStop(1,'#000d14b2');ctx.fillStyle=grad;ctx.fillRect(0,0,w,h);}
+function loop(time){let dt=Math.min((time-(g.last||time))/1000,.06);g.last=time;update(dt);drawFrame();requestAnimationFrame(loop)}
+// Events
+$$('.seg').forEach(group=>group.addEventListener('click',e=>{let b=e.target.closest('button[data-value]');if(!b)return;const key=group.dataset.setting;cfg[key]=key==='innings'||key==='difficulty'?Number(b.dataset.value):b.dataset.value;group.querySelectorAll('button').forEach(x=>x.classList.toggle('active',x===b));sfx('good')}));
+$('#startMatch').addEventListener('click',()=>{sfx('good');setupGame('match')});$('#startDerby').addEventListener('click',()=>{sfx('good');setupGame('derby')});$('#swingBtn').addEventListener('pointerdown',e=>{e.preventDefault();swing()});$('#swingBtn').addEventListener('click',e=>e.preventDefault());$$('[data-dir]').forEach(b=>b.addEventListener('click',()=>setDirection(Number(b.dataset.dir))));$$('[data-pitch]').forEach(b=>b.addEventListener('click',()=>setPitchType(b.dataset.pitch)));
+const zone=$('#pitchZone');for(let i=0;i<9;i++){const b=document.createElement('button');b.className='zonecell'+(i===4?' active':'');b.dataset.target=i;b.setAttribute('aria-label',`投球位置第 ${i+1} 格`);b.addEventListener('click',()=>setTarget(i));zone.appendChild(b)}$('#throwBtn').addEventListener('pointerdown',e=>{e.preventDefault();throwPitch()});$('#catchBtn').addEventListener('pointerdown',e=>{e.preventDefault();fieldCatch()});$('#pauseBtn').addEventListener('click',togglePause);
+$('#field').addEventListener('pointerdown',e=>{if(g.screen==='bat')swing();else if(g.screen==='flight')fieldCatch();});document.addEventListener('keydown',e=>{const code=e.code;if(['Space','ArrowLeft','ArrowRight','ArrowUp','ArrowDown'].includes(code))e.preventDefault();if(code==='Escape'||code==='KeyP'){if(g.screen==='overlay'&&g.overlayIsPause)$('#ovPrimary').click();else togglePause();return}if(g.screen==='bat'){if(code==='Space')swing();if(code==='ArrowLeft')setDirection(-1);if(code==='ArrowRight')setDirection(1);if(code==='ArrowUp')setDirection(0)}else if(g.screen==='pitch'){if(code==='Space')throwPitch();if(code==='Digit1')setPitchType('fast');if(code==='Digit2')setPitchType('curve');if(code==='Digit3')setPitchType('change');}else if(g.screen==='flight'&&code==='Space')fieldCatch()});document.addEventListener('visibilitychange',()=>{g.last=0;if(document.hidden&&g.screen!=='menu'&&g.screen!=='overlay')togglePause()});
+setScreen('menu');requestAnimationFrame(loop);
+if('serviceWorker' in navigator && location.protocol.startsWith('http')){navigator.serviceWorker.register('./sw.js').catch(()=>{});}
+})();
+</script>
+</body></html>
